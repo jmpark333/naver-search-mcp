@@ -1,26 +1,27 @@
-FROM node:18-alpine AS builder
+FROM node:22.12-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files and install dependencies
-COPY package*.json ./
-RUN npm install
+# Copy source files
+COPY . /app
+COPY tsconfig.json /tsconfig.json
 
-# Copy source code and build
-COPY . .
-RUN npm run build
+# Install dependencies with cache
+RUN --mount=type=cache,target=/root/.npm npm install
 
-# Production stage
-FROM node:18-alpine
+# Install production dependencies
+RUN --mount=type=cache,target=/root/.npm-production npm ci --ignore-scripts --omit-dev
+
+FROM node:22-alpine AS release
 
 WORKDIR /app
 
-# Copy package files and install production dependencies
-COPY package*.json ./
-RUN npm ci --only=production
+COPY --from=builder /app/dist /app/dist
+COPY --from=builder /app/package.json /app/package.json
+COPY --from=builder /app/package-lock.json /app/package-lock.json
 
-# Copy built files from builder stage
-COPY --from=builder /app/dist ./dist
+ENV NODE_ENV=production
 
-# Run the server
-CMD ["node", "dist/src/index.js"] 
+RUN npm ci --ignore-scripts --omit-dev
+
+ENTRYPOINT ["node", "/app/dist/src/index.js"] 
