@@ -114,11 +114,20 @@ export class NaverSearchClient {
     return this.search<NaverSearchResponse>({ type: "book", ...params });
   }
 
+  /**
+   * @deprecated Use searchAcademic instead
+   */
   async searchDoc(
     params: NaverDocumentSearchParams
   ): Promise<NaverDocumentSearchResponse> {
+    return this.searchAcademic(params);
+  }
+
+  async searchAcademic(
+    params: NaverDocumentSearchParams
+  ): Promise<NaverDocumentSearchResponse> {
     const response = await axios.get<NaverDocumentSearchResponse>(
-      `${this.searchBaseUrl}/doc`,
+      `${this.searchBaseUrl}/doc.json`,
       {
         params: { ...params },
         ...this.getHeaders(),
