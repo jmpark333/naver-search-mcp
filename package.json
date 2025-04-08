@@ -12,11 +12,14 @@
     "dist"
   ],
   "scripts": {
-    "prebuild": "rm -rf dist && mkdir -p dist",
+    "prebuild": "rm -rf dist",
     "build": "tsc",
     "prepare": "npm run build",
     "watch": "tsc --watch",
     "start": "node dist/src/index.js"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "0.5.0",
