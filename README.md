@@ -1,6 +1,7 @@
 # Naver Search MCP 서버
 
 [![smithery badge](https://smithery.ai/badge/@isnow890/naver-search-mcp)](https://smithery.ai/server/@isnow890/naver-search-mcp)
+[![MCP.so](https://img.shields.io/badge/MCP.so-Naver%20Search%20MCP-blue)](https://mcp.so/server/naver-search-mcp/isnow890)
 
 네이버 검색 API를 사용하여 다양한 콘텐츠를 검색하고 데이터랩으로 데이터를 분석할 수 있는 MCP 서버입니다.
 
@@ -22,29 +23,27 @@
 
 ### 검색 기능
 
-- 통합 검색 (search)
-- 블로그 검색 (search_blog)
-- 뉴스 검색 (search_news)
-- 책 검색 (search_book)
-- 성인 검색어 판별 (search_adult)
-- 백과사전 검색 (search_encyc)
-- 카페글 검색 (search_cafearticle)
-- 지식iN 검색 (search_kin)
-- 지역 검색 (search_local)
-- 오타변환 검색 (search_errata)
-- 웹문서 검색 (search_doc)
-- 이미지 검색 (search_image)
-- 쇼핑 검색 (search_shop)
-- 전문자료 검색 (search_academic)
+- 네이버 뉴스 검색 (search_news)
+- 네이버 블로그 검색 (search_blog)
+- 네이버 쇼핑 검색 (search_shop)
+- 네이버 이미지 검색 (search_image)
+- 네이버 지식iN 검색 (search_kin)
+- 네이버 책 검색 (search_book)
+- 네이버 백과사전 검색 (search_encyc)
+- 네이버 학술자료 검색 (search_academic)
+- 네이버 지역 검색 (search_local)
 
 ### 데이터랩 기능
 
-- 검색어 트렌드 분석 (datalab_search)
-- 쇼핑 카테고리 트렌드 (datalab_shopping_category)
-- 기기별 쇼핑 트렌드 - PC/모바일 (datalab_shopping_by_device)
-- 성별 쇼핑 트렌드 (datalab_shopping_by_gender)
-- 연령대별 쇼핑 트렌드 (datalab_shopping_by_age)
-- 쇼핑 키워드 트렌드 (datalab_shopping_keywords)
+- 네이버 검색어 트렌드 분석 (datalab_search)
+- 네이버 쇼핑 카테고리별 트렌드 분석 (datalab_shopping_category)
+- 네이버 쇼핑 기기별 트렌드 분석 (datalab_shopping_by_device)
+- 네이버 쇼핑 성별 트렌드 분석 (datalab_shopping_by_gender)
+- 네이버 쇼핑 연령별 트렌드 분석 (datalab_shopping_by_age)
+- 네이버 쇼핑 키워드별 트렌드 분석 (datalab_shopping_keywords)
+- 네이버 쇼핑 키워드 기기별 트렌드 분석 (datalab_shopping_keyword_by_device)
+- 네이버 쇼핑 키워드 성별 트렌드 분석 (datalab_shopping_keyword_by_gender)
+- 네이버 쇼핑 키워드 연령별 트렌드 분석 (datalab_shopping_keyword_by_age)
 
 ## 설치 및 실행
 
@@ -118,18 +117,7 @@ Docker를 사용하는 경우:
 
 ## 도구 설명
 
-### 통합 검색
-
-- **search**
-  - 모든 콘텐츠 유형에 대한 통합 검색을 수행할 수 있는 도구
-  - 매개변수:
-    - `type`: 검색 유형 (news, blog, shop 등)
-    - `query`: 검색어 (필수)
-    - `display`: 표시할 결과 수 (기본값: 10)
-    - `start`: 검색 결과 시작 위치 (기본값: 1)
-    - `sort`: 정렬 방법 (sim: 유사도순, date: 날짜순)
-
-### 개별 검색 도구
+### 검색 도구
 
 각 검색 도구는 다음 매개변수를 사용합니다:
 
@@ -140,15 +128,15 @@ Docker를 사용하는 경우:
 
 사용 가능한 검색 도구:
 
-- **search_news**: 뉴스 검색
-- **search_blog**: 블로그 검색
-- **search_shop**: 쇼핑 검색
-- **search_image**: 이미지 검색
-- **search_kin**: 지식iN 검색
-- **search_book**: 책 검색
-- **search_encyc**: 백과사전 검색
-- **search_doc**: 웹문서 검색
-- **search_cafearticle**: 카페글 검색
+- **search_news**: 네이버 뉴스 검색
+- **search_blog**: 네이버 블로그 검색
+- **search_shop**: 네이버 쇼핑 검색
+- **search_image**: 네이버 이미지 검색
+- **search_kin**: 네이버 지식iN 검색
+- **search_book**: 네이버 책 검색
+- **search_encyc**: 네이버 백과사전 검색
+- **search_academic**: 네이버 학술자료 검색
+- **search_local**: 네이버 지역 검색
 
 ### 데이터랩 도구
 
@@ -170,7 +158,7 @@ Docker를 사용하는 경우:
     - `startDate`: 분석 시작일 (YYYY-MM-DD)
     - `endDate`: 분석 종료일 (YYYY-MM-DD)
     - `timeUnit`: 분석 시간 단위 (date: 일간, week: 주간, month: 월간)
-    - `category`: 쇼핑 카테고리 코드
+    - `category`: 쇼핑 카테고리 코드와 이름 배열
 
 - **datalab_shopping_by_device**
 
@@ -203,13 +191,46 @@ Docker를 사용하는 경우:
     - `ages`: 연령대 배열 (예: ["10", "20", "30"])
 
 - **datalab_shopping_keywords**
+
   - 쇼핑 키워드 트렌드 분석
   - 매개변수:
     - `startDate`: 분석 시작일 (YYYY-MM-DD)
     - `endDate`: 분석 종료일 (YYYY-MM-DD)
     - `timeUnit`: 분석 시간 단위 (date: 일간, week: 주간, month: 월간)
     - `category`: 쇼핑 카테고리 코드
+    - `keyword`: 키워드와 이름 배열
+
+- **datalab_shopping_keyword_by_device**
+
+  - 쇼핑 키워드 기기별 트렌드 분석
+  - 매개변수:
+    - `startDate`: 분석 시작일 (YYYY-MM-DD)
+    - `endDate`: 분석 종료일 (YYYY-MM-DD)
+    - `timeUnit`: 분석 시간 단위 (date: 일간, week: 주간, month: 월간)
+    - `category`: 쇼핑 카테고리 코드
     - `keyword`: 검색 키워드
+    - `device`: 기기 유형 (pc: PC, mo: 모바일)
+
+- **datalab_shopping_keyword_by_gender**
+
+  - 쇼핑 키워드 성별 트렌드 분석
+  - 매개변수:
+    - `startDate`: 분석 시작일 (YYYY-MM-DD)
+    - `endDate`: 분석 종료일 (YYYY-MM-DD)
+    - `timeUnit`: 분석 시간 단위 (date: 일간, week: 주간, month: 월간)
+    - `category`: 쇼핑 카테고리 코드
+    - `keyword`: 검색 키워드
+    - `gender`: 성별 (f: 여성, m: 남성)
+
+- **datalab_shopping_keyword_by_age**
+  - 쇼핑 키워드 연령별 트렌드 분석
+  - 매개변수:
+    - `startDate`: 분석 시작일 (YYYY-MM-DD)
+    - `endDate`: 분석 종료일 (YYYY-MM-DD)
+    - `timeUnit`: 분석 시간 단위 (date: 일간, week: 주간, month: 월간)
+    - `category`: 쇼핑 카테고리 코드
+    - `keyword`: 검색 키워드
+    - `ages`: 연령대 배열 (예: ["10", "20", "30"])
 
 ## 빌드
 

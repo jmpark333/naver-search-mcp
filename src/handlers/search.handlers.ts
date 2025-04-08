@@ -1,7 +1,6 @@
-import { NaverSearchClient } from "../naver-search.js";
+import { NaverSearchClient } from "../naver-search.client.js";
 import { 
-  NaverSearchType, 
-  NaverDocumentSearchParams, 
+  NaverSearchType, NaverDocumentSearchParams, 
   NaverLocalSearchParams
 } from "../types/naver-search.types.js";
 import { SearchArgs } from "../schemas/search.schemas.js";

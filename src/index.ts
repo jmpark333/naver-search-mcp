@@ -6,7 +6,7 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
-import { NaverSearchClient } from "./naver-search.js";
+import { NaverSearchClient } from "./naver-search.client.js";
 import { SearchArgsSchema } from "./schemas/search.schemas.js";
 import { searchTools } from "./tools/search.tools.js";
 import { datalabTools } from "./tools/datalab.tools.js";
