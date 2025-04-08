@@ -15,7 +15,6 @@ import {
   NaverSearchConfigSchema,
   NaverSearchType,
   DatalabSearchRequest,
-  DatalabShoppingRequest,
   // VisionCelebrityRequest,
 } from "./types/naver-search.types.js";
 import { NaverSearchClient } from "./naver-search.js";
@@ -54,84 +53,180 @@ const server = new Server(
 
 // Define base search arguments schema
 const SearchArgsSchema = z.object({
-  query: z.string().describe("검색어"),
-  display: z.number().optional().describe("검색 결과 출력 건수 (기본값: 10)"),
-  start: z.number().optional().describe("검색 시작 위치 (기본값: 1)"),
+  query: z.string().describe("Search query"),
+  display: z
+    .number()
+    .optional()
+    .describe("Number of results to display (default: 10)"),
+  start: z
+    .number()
+    .optional()
+    .describe("Start position of search results (default: 1)"),
   sort: z
     .enum(["sim", "date"])
     .optional()
-    .describe("정렬 방식 (sim: 유사도순, date: 날짜순)"),
+    .describe("Sort method (sim: similarity, date: date)"),
 });
 
-// Define DataLab search arguments schema
+// Base DataLab schema
 const DatalabBaseSchema = z.object({
-  startDate: z.string().describe("시작 날짜 (yyyy-mm-dd)"),
-  endDate: z.string().describe("종료 날짜 (yyyy-mm-dd)"),
-  timeUnit: z.enum(["date", "week", "month"]).describe("시간 단위"),
+  startDate: z.string().describe("Start date (yyyy-mm-dd)"),
+  endDate: z.string().describe("End date (yyyy-mm-dd)"),
+  timeUnit: z.enum(["date", "week", "month"]).describe("Time unit"),
 });
 
-const DatalabSearchSchema = DatalabBaseSchema.extend({
-  keywordGroups: z
-    .array(
-      z.object({
-        groupName: z.string().describe("그룹명"),
-        keywords: z.array(z.string()).describe("키워드 목록"),
-      })
-    )
-    .describe("검색어 그룹"),
-});
-
-// 쇼핑인사이트 분야별 트렌드 조회
+// Shopping Category schema (for general category trends)
 const DatalabShoppingSchema = DatalabBaseSchema.extend({
   category: z
     .array(
       z.object({
-        name: z.string().describe("분야 이름"),
-        param: z.array(z.string()).describe("분야 코드"),
+        name: z.string().describe("Category name"),
+        param: z.array(z.string()).describe("Category codes"),
       })
     )
-    .describe("분야 이름과 코드 쌍의 배열"),
-  device: z.enum(["pc", "mo"]).optional().describe("기기 타입"),
-  gender: z.enum(["f", "m"]).optional().describe("성별"),
-  ages: z
-    .array(z.enum(["10", "20", "30", "40", "50", "60"]))
-    .optional()
-    .describe("연령대"),
+    .describe("Array of category name and code pairs"),
 });
 
-// 쇼핑인사이트 분야 내 기기별/성별/연령별 트렌드 조회
+// Device-specific schema
+const DatalabShoppingDeviceSchema = DatalabBaseSchema.extend({
+  category: z.string().describe("Category code"),
+  device: z.enum(["pc", "mo"]).describe("Device type"),
+});
+
+// Gender-specific schema
+const DatalabShoppingGenderSchema = DatalabBaseSchema.extend({
+  category: z.string().describe("Category code"),
+  gender: z.enum(["f", "m"]).describe("Gender"),
+});
+
+// Age-specific schema
+const DatalabShoppingAgeSchema = DatalabBaseSchema.extend({
+  category: z.string().describe("Category code"),
+  ages: z
+    .array(z.enum(["10", "20", "30", "40", "50", "60"]))
+    .describe("Age groups"),
+});
+
+// Keywords trend schema
+const DatalabShoppingKeywordsSchema = DatalabBaseSchema.extend({
+  category: z.string().describe("Category code"),
+  keyword: z
+    .array(
+      z.object({
+        name: z.string().describe("Keyword name"),
+        param: z.array(z.string()).describe("Keyword values"),
+      })
+    )
+    .describe("Array of keyword name and value pairs"),
+});
+
+// Keyword by device schema
+const DatalabShoppingKeywordDeviceSchema = DatalabBaseSchema.extend({
+  category: z.string().describe("Category code"),
+  keyword: z.string().describe("Search keyword"),
+  device: z.enum(["pc", "mo"]).describe("Device type"),
+});
+
+// Keyword by gender schema
+const DatalabShoppingKeywordGenderSchema = DatalabBaseSchema.extend({
+  category: z.string().describe("Category code"),
+  keyword: z.string().describe("Search keyword"),
+  gender: z.enum(["f", "m"]).describe("Gender"),
+});
+
+// Keyword by age schema
+const DatalabShoppingKeywordAgeSchema = DatalabBaseSchema.extend({
+  category: z.string().describe("Category code"),
+  keyword: z.string().describe("Search keyword"),
+  ages: z
+    .array(z.enum(["10", "20", "30", "40", "50", "60"]))
+    .describe("Age groups"),
+});
+
+// Shopping Insight Category Trends
 const DatalabShoppingCategorySchema = DatalabBaseSchema.extend({
-  category: z.string().describe("분야 코드"),
-  device: z.enum(["pc", "mo"]).optional().describe("기기 타입"),
-  gender: z.enum(["f", "m"]).optional().describe("성별"),
+  category: z
+    .array(
+      z.object({
+        name: z.string().describe("Category name"),
+        param: z.array(z.string()).describe("Category codes"),
+      })
+    )
+    .describe("Array of category name and code pairs"),
+  device: z.enum(["pc", "mo"]).optional().describe("Device type"),
+  gender: z.enum(["f", "m"]).optional().describe("Gender"),
   ages: z
     .array(z.enum(["10", "20", "30", "40", "50", "60"]))
     .optional()
-    .describe("연령대"),
+    .describe("Age groups"),
 });
 
-// 쇼핑인사이트 키워드별 트렌드 조회
+// Shopping Insight Category Device/Gender/Age Trends
+const DatalabShoppingCategoryDeviceSchema = DatalabBaseSchema.extend({
+  category: z
+    .array(
+      z.object({
+        name: z.string().describe("Category name"),
+        param: z.array(z.string()).describe("Category codes"),
+      })
+    )
+    .describe("Array of category name and code pairs"),
+  device: z.enum(["pc", "mo"]).optional().describe("Device type"),
+  gender: z.enum(["f", "m"]).optional().describe("Gender"),
+  ages: z
+    .array(z.enum(["10", "20", "30", "40", "50", "60"]))
+    .optional()
+    .describe("Age groups"),
+});
+
+// Shopping Insight Keyword Trends
 const DatalabShoppingKeywordSchema = DatalabBaseSchema.extend({
-  category: z.string().describe("분야 코드"),
-  keyword: z.string().describe("검색 키워드"),
-  device: z.enum(["pc", "mo"]).optional().describe("기기 타입"),
-  gender: z.enum(["f", "m"]).optional().describe("성별"),
+  category: z.string().describe("Category code"),
+  keyword: z
+    .array(
+      z.object({
+        name: z.string().describe("Keyword name"),
+        param: z.array(z.string()).describe("Keyword values"),
+      })
+    )
+    .describe("Array of keyword name and value pairs"),
+  device: z.enum(["pc", "mo"]).optional().describe("Device type"),
+  gender: z.enum(["f", "m"]).optional().describe("Gender"),
   ages: z
     .array(z.enum(["10", "20", "30", "40", "50", "60"]))
     .optional()
-    .describe("연령대"),
+    .describe("Age groups"),
 });
 
-// 쇼핑인사이트 키워드 기기별/성별/연령별 트렌드 조회
+// Shopping Insight Keyword Device/Gender/Age Trends
 const DatalabShoppingKeywordTrendSchema = DatalabBaseSchema.extend({
-  category: z.string().describe("분야 코드"),
-  keyword: z.string().describe("검색 키워드"),
-  device: z.enum(["pc", "mo"]).optional().describe("기기 타입"),
-  gender: z.enum(["f", "m"]).optional().describe("성별"),
+  category: z.string().describe("Category code"),
+  keyword: z
+    .array(
+      z.object({
+        name: z.string().describe("Keyword name"),
+        param: z.array(z.string()).describe("Keyword values"),
+      })
+    )
+    .describe("Array of keyword name and value pairs"),
+  device: z.enum(["pc", "mo"]).optional().describe("Device type"),
+  gender: z.enum(["f", "m"]).optional().describe("Gender"),
   ages: z
     .array(z.enum(["10", "20", "30", "40", "50", "60"]))
     .optional()
-    .describe("연령대"),
+    .describe("Age groups"),
+});
+
+// DataLab Search schema
+const DatalabSearchSchema = DatalabBaseSchema.extend({
+  keywordGroups: z
+    .array(
+      z.object({
+        groupName: z.string().describe("Group name"),
+        keywords: z.array(z.string()).describe("List of keywords"),
+      })
+    )
+    .describe("Keyword groups"),
 });
 
 // Vision API
@@ -150,49 +245,54 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
     tools: [
       {
         name: "search_news",
-        description: "네이버 뉴스 검색을 수행합니다.",
+        description: "Perform a search on Naver News.",
         inputSchema: zodToJsonSchema(SearchArgsSchema),
       },
       {
         name: "search_blog",
-        description: "네이버 블로그 검색을 수행합니다.",
+        description: "Perform a search on Naver Blog.",
         inputSchema: zodToJsonSchema(SearchArgsSchema),
       },
       {
         name: "search_shop",
-        description: "네이버 쇼핑 검색을 수행합니다.",
+        description: "Perform a search on Naver Shopping.",
         inputSchema: zodToJsonSchema(SearchArgsSchema),
       },
       {
         name: "search_image",
-        description: "네이버 이미지 검색을 수행합니다.",
+        description: "Perform a search on Naver Image.",
         inputSchema: zodToJsonSchema(SearchArgsSchema),
       },
       {
         name: "search_kin",
-        description: "네이버 지식iN 검색을 수행합니다.",
+        description: "Perform a search on Naver KnowledgeiN.",
         inputSchema: zodToJsonSchema(SearchArgsSchema),
       },
       {
         name: "search_book",
-        description: "네이버 책 검색을 수행합니다.",
+        description: "Perform a search on Naver Book.",
+        inputSchema: zodToJsonSchema(SearchArgsSchema),
+      },
+      {
+        name: "search_doc",
+        description: "Perform a search on Naver Document DB.",
         inputSchema: zodToJsonSchema(SearchArgsSchema),
       },
       {
         name: "datalab_search",
-        description: "네이버 검색어 트렌드 분석을 수행합니다.",
+        description: "Perform a trend analysis on Naver search keywords.",
         inputSchema: zodToJsonSchema(DatalabSearchSchema),
       },
       {
         name: "datalab_shopping_category",
-        description: "네이버 쇼핑 카테고리별 트렌드 분석을 수행합니다.",
+        description: "Perform a trend analysis on Naver Shopping category.",
         inputSchema: zodToJsonSchema(DatalabShoppingSchema),
       },
       {
         name: "datalab_shopping_by_device",
-        description: "네이버 쇼핑 기기별 트렌드 분석을 수행합니다.",
+        description: "Perform a trend analysis on Naver Shopping by device.",
         inputSchema: zodToJsonSchema(
-          DatalabShoppingSchema.pick({
+          DatalabShoppingDeviceSchema.pick({
             startDate: true,
             endDate: true,
             timeUnit: true,
@@ -203,9 +303,9 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: "datalab_shopping_by_gender",
-        description: "네이버 쇼핑 성별 트렌드 분석을 수행합니다.",
+        description: "Perform a trend analysis on Naver Shopping by gender.",
         inputSchema: zodToJsonSchema(
-          DatalabShoppingSchema.pick({
+          DatalabShoppingGenderSchema.pick({
             startDate: true,
             endDate: true,
             timeUnit: true,
@@ -216,9 +316,9 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: "datalab_shopping_by_age",
-        description: "네이버 쇼핑 연령대별 트렌드 분석을 수행합니다.",
+        description: "Perform a trend analysis on Naver Shopping by age.",
         inputSchema: zodToJsonSchema(
-          DatalabShoppingSchema.pick({
+          DatalabShoppingAgeSchema.pick({
             startDate: true,
             endDate: true,
             timeUnit: true,
@@ -234,23 +334,26 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       // },
       {
         name: "datalab_shopping_keywords",
-        description: "네이버 쇼핑 키워드별 트렌드 분석을 수행합니다.",
-        inputSchema: zodToJsonSchema(DatalabShoppingKeywordSchema),
+        description: "Perform a trend analysis on Naver Shopping keywords.",
+        inputSchema: zodToJsonSchema(DatalabShoppingKeywordsSchema),
       },
       {
         name: "datalab_shopping_keyword_by_device",
-        description: "네이버 쇼핑 키워드 기기별 트렌드 분석을 수행합니다.",
-        inputSchema: zodToJsonSchema(DatalabShoppingKeywordTrendSchema),
+        description:
+          "Perform a trend analysis on Naver Shopping keywords by device.",
+        inputSchema: zodToJsonSchema(DatalabShoppingKeywordDeviceSchema),
       },
       {
         name: "datalab_shopping_keyword_by_gender",
-        description: "네이버 쇼핑 키워드 성별 트렌드 분석을 수행합니다.",
-        inputSchema: zodToJsonSchema(DatalabShoppingKeywordTrendSchema),
+        description:
+          "Perform a trend analysis on Naver Shopping keywords by gender.",
+        inputSchema: zodToJsonSchema(DatalabShoppingKeywordGenderSchema),
       },
       {
         name: "datalab_shopping_keyword_by_age",
-        description: "네이버 쇼핑 키워드 연령별 트렌드 분석을 수행합니다.",
-        inputSchema: zodToJsonSchema(DatalabShoppingKeywordTrendSchema),
+        description:
+          "Perform a trend analysis on Naver Shopping keywords by age.",
+        inputSchema: zodToJsonSchema(DatalabShoppingKeywordAgeSchema),
       },
     ],
   };
@@ -318,7 +421,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       case "search_shop":
       case "search_image":
       case "search_kin":
-      case "search_book": {
+      case "search_book":
+      case "search_doc": {
         const params = SearchArgsSchema.parse(args);
         const type = name.replace("search_", "") as NaverSearchType;
         result = await client.search({ type, ...params });
@@ -344,46 +448,37 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       case "datalab_shopping_by_device": {
-        const params = DatalabShoppingCategorySchema.pick({
-          startDate: true,
-          endDate: true,
-          timeUnit: true,
-          category: true,
-          device: true,
-        }).parse(args);
-        result = await client.datalabShoppingCategoryDevice({
-          ...params,
-          category: [{ name: params.category, param: [params.category] }],
+        const params = DatalabShoppingDeviceSchema.parse(args);
+        result = await client.datalabShoppingByDevice({
+          startDate: params.startDate,
+          endDate: params.endDate,
+          timeUnit: params.timeUnit,
+          category: params.category,
+          device: params.device,
         });
         break;
       }
 
       case "datalab_shopping_by_gender": {
-        const params = DatalabShoppingCategorySchema.pick({
-          startDate: true,
-          endDate: true,
-          timeUnit: true,
-          category: true,
-          gender: true,
-        }).parse(args);
-        result = await client.datalabShoppingCategoryGender({
-          ...params,
-          category: [{ name: params.category, param: [params.category] }],
+        const params = DatalabShoppingGenderSchema.parse(args);
+        result = await client.datalabShoppingByGender({
+          startDate: params.startDate,
+          endDate: params.endDate,
+          timeUnit: params.timeUnit,
+          category: params.category,
+          gender: params.gender,
         });
         break;
       }
 
       case "datalab_shopping_by_age": {
-        const params = DatalabShoppingCategorySchema.pick({
-          startDate: true,
-          endDate: true,
-          timeUnit: true,
-          category: true,
-          ages: true,
-        }).parse(args);
-        result = await client.datalabShoppingCategoryAge({
-          ...params,
-          category: [{ name: params.category, param: [params.category] }],
+        const params = DatalabShoppingAgeSchema.parse(args);
+        result = await client.datalabShoppingByAge({
+          startDate: params.startDate,
+          endDate: params.endDate,
+          timeUnit: params.timeUnit,
+          category: params.category,
+          ages: params.ages,
         });
         break;
       }
@@ -402,56 +497,52 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       // }
 
       case "datalab_shopping_keywords": {
-        const params = DatalabShoppingKeywordSchema.parse(args);
-        console.error(
-          "Calling shopping keywords trend API with params:",
-          params
-        );
-        result = await client.datalabShoppingKeywords(params);
-        break;
-      }
-
-      case "datalab_shopping_keyword_by_device": {
-        const params = DatalabShoppingKeywordTrendSchema.parse(args);
-        result = await client.datalabShoppingKeywordDevice({
+        const params = DatalabShoppingKeywordsSchema.parse(args);
+        result = await client.datalabShoppingKeywords({
           startDate: params.startDate,
           endDate: params.endDate,
           timeUnit: params.timeUnit,
           category: params.category,
           keyword: params.keyword,
-          device: params.device || "",
-          gender: "",
-          ages: [],
+        });
+        break;
+      }
+
+      case "datalab_shopping_keyword_by_device": {
+        const params = DatalabShoppingKeywordDeviceSchema.parse(args);
+        result = await client.datalabShoppingKeywordByDevice({
+          startDate: params.startDate,
+          endDate: params.endDate,
+          timeUnit: params.timeUnit,
+          category: params.category,
+          keyword: params.keyword,
+          device: params.device,
         });
         break;
       }
 
       case "datalab_shopping_keyword_by_gender": {
-        const params = DatalabShoppingKeywordTrendSchema.parse(args);
-        result = await client.datalabShoppingKeywordGender({
+        const params = DatalabShoppingKeywordGenderSchema.parse(args);
+        result = await client.datalabShoppingKeywordByGender({
           startDate: params.startDate,
           endDate: params.endDate,
           timeUnit: params.timeUnit,
           category: params.category,
           keyword: params.keyword,
-          device: "",
-          gender: params.gender || "",
-          ages: [],
+          gender: params.gender,
         });
         break;
       }
 
       case "datalab_shopping_keyword_by_age": {
-        const params = DatalabShoppingKeywordTrendSchema.parse(args);
-        result = await client.datalabShoppingKeywordAge({
+        const params = DatalabShoppingKeywordAgeSchema.parse(args);
+        result = await client.datalabShoppingKeywordByAge({
           startDate: params.startDate,
           endDate: params.endDate,
           timeUnit: params.timeUnit,
           category: params.category,
           keyword: params.keyword,
-          device: "",
-          gender: "",
-          ages: params.ages || [],
+          ages: params.ages,
         });
         break;
       }

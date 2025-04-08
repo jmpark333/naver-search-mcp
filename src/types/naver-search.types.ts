@@ -43,39 +43,35 @@ export interface NaverSearchResponse {
   total: number;
   start: number;
   display: number;
-  items: any[];
+  items: NaverSearchItem[];
   isError?: boolean;
+}
+
+export interface NaverSearchItem {
+  title: string;
+  link: string;
+  description: string;
+}
+
+export interface NaverDocumentSearchResponse extends NaverSearchResponse {
+  items: NaverDocumentItem[];
+}
+
+export interface NaverDocumentItem extends NaverSearchItem {
+  title: string; // 문서 제목 (검색어와 일치하는 부분은 <b> 태그로 감싸짐)
+  link: string; // 문서 URL
+  description: string; // 문서 내용 요약 (검색어와 일치하는 부분은 <b> 태그로 감싸짐)
 }
 
 // DataLab Search Types
 export interface DatalabSearchRequest {
-  startDate: string; // 조회 기간 시작날짜(yyyy-mm-dd)
-  endDate: string; // 조회 기간 종료날짜(yyyy-mm-dd)
-  timeUnit: "date" | "week" | "month"; // 구간 단위
+  startDate: string;
+  endDate: string;
+  timeUnit: "date" | "week" | "month";
   keywordGroups: Array<{
     groupName: string;
     keywords: string[];
   }>;
-}
-
-// DataLab Shopping Types
-export interface DatalabShoppingRequest {
-  startDate: string;
-  endDate: string;
-  timeUnit: "date" | "week" | "month";
-  category:
-    | string
-    | {
-        name: string;
-        param: string[];
-      }[];
-  keyword?: {
-    name: string;
-    param: string[];
-  }[];
-  device?: "pc" | "mo";
-  gender?: "m" | "f";
-  ages?: ("10" | "20" | "30" | "40" | "50" | "60")[];
 }
 
 export interface DatalabShoppingResponse {
@@ -94,69 +90,71 @@ export interface DatalabShoppingResponse {
   }[];
 }
 
-// Vision API Types
-// export interface VisionCelebrityRequest {
-//   image: string;
-// }
-
-// export interface VisionCelebrityResponse {
-//   info: {
-//     size: {
-//       width: number;
-//       height: number;
-//     };
-//     faceCount: number;
-//   };
-//   faces: Array<{
-//     celebrity: {
-//       value: string;
-//       confidence: number;
-//     };
-//   }>;
-// }
-
 export interface NaverWebSearchParams extends NaverSearchParams {
   type?: "webkr";
 }
 
-export interface NaverSearchTrendParams {
+// DataLab Shopping Category Types
+export interface DatalabShoppingCategoryRequest {
   startDate: string;
   endDate: string;
   timeUnit: "date" | "week" | "month";
-  keywordGroups: Array<{
-    groupName: string;
-    keywords: string[];
+  category: Array<{
+    name: string;
+    param: string[];
+  }>;
+  device?: "pc" | "mo";
+  gender?: "f" | "m";
+  ages?: string[];
+}
+
+// DataLab Shopping Device Types
+export interface DatalabShoppingDeviceRequest {
+  startDate: string;
+  endDate: string;
+  timeUnit: "date" | "week" | "month";
+  category: string;
+  device: "pc" | "mo";
+}
+
+// DataLab Shopping Gender Types
+export interface DatalabShoppingGenderRequest {
+  startDate: string;
+  endDate: string;
+  timeUnit: "date" | "week" | "month";
+  category: string;
+  gender: "f" | "m";
+}
+
+// DataLab Shopping Age Types
+export interface DatalabShoppingAgeRequest {
+  startDate: string;
+  endDate: string;
+  timeUnit: "date" | "week" | "month";
+  category: string;
+  ages: string[];
+}
+
+// DataLab Shopping Keywords Types
+export interface DatalabShoppingKeywordsRequest {
+  startDate: string;
+  endDate: string;
+  timeUnit: "date" | "week" | "month";
+  category: string;
+  keyword: Array<{
+    name: string;
+    param: string[];
   }>;
 }
 
-export interface NaverShoppingTrendParams {
-  startDate: string;
-  endDate: string;
-  timeUnit: "date" | "week" | "month";
-  category: string | { name: string; param: string[] }[];
-  keyword?: { name: string; param: string[] }[];
-  device?: "pc" | "mo";
-  gender?: "m" | "f";
-  ages?: ("10" | "20" | "30" | "40" | "50" | "60")[];
-}
-
-export interface NaverCelebrityParams {
-  image: string;
-}
-
 // DataLab Shopping Keyword Types
-export interface DatalabShoppingKeywordItem {
-  name: string;
-  param: string[];
-}
-
 export interface DatalabShoppingKeywordRequest {
   startDate: string;
   endDate: string;
   timeUnit: "date" | "week" | "month";
   category: string;
-  keyword: DatalabShoppingKeywordItem[];
-  device?: string;
-  gender?: string;
+  keyword: string;
+  device?: "pc" | "mo";
+  gender?: "f" | "m";
   ages?: string[];
 }

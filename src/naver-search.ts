@@ -1,41 +1,20 @@
-import axios, { AxiosRequestConfig, RawAxiosRequestHeaders } from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import {
   NaverSearchType,
   NaverSearchConfig,
   NaverSearchParams,
   NaverSearchResponse,
   DatalabSearchRequest,
-  DatalabShoppingRequest,
   DatalabShoppingResponse,
   NaverWebSearchParams,
+  DatalabShoppingCategoryRequest,
+  DatalabShoppingDeviceRequest,
+  DatalabShoppingGenderRequest,
+  DatalabShoppingAgeRequest,
+  DatalabShoppingKeywordsRequest,
+  DatalabShoppingKeywordRequest,
+  NaverDocumentSearchResponse,
 } from "./types/naver-search.types.js";
-import fs from "fs";
-import path from "path";
-
-// Types for DataLab Shopping API
-interface DatalabShoppingCategoryRequest {
-  startDate: string;
-  endDate: string;
-  timeUnit: "date" | "week" | "month";
-  category: Array<{
-    name: string;
-    param: string[];
-  }>;
-  device?: string;
-  gender?: string;
-  ages?: string[];
-}
-
-interface DatalabShoppingKeywordRequest {
-  startDate: string;
-  endDate: string;
-  timeUnit: "date" | "week" | "month";
-  category: string;
-  keyword: string;
-  device?: string;
-  gender?: string;
-  ages?: string[];
-}
 
 /**
  * NaverSearchClient - A singleton client for interacting with Naver's APIs
@@ -131,6 +110,12 @@ export class NaverSearchClient {
     return this.search({ type: "book", ...params });
   }
 
+  async searchDoc(
+    params: NaverSearchParams
+  ): Promise<NaverDocumentSearchResponse> {
+    return this.search({ type: "doc", ...params });
+  }
+
   async searchWeb(params: NaverWebSearchParams): Promise<NaverSearchResponse> {
     return this.search({ type: "webkr", ...params });
   }
@@ -143,100 +128,50 @@ export class NaverSearchClient {
   // DataLab Shopping API methods
   async datalabShoppingCategory(
     params: DatalabShoppingCategoryRequest
-  ): Promise<any> {
+  ): Promise<DatalabShoppingResponse> {
     return this.post("datalab", "/shopping/categories", params);
   }
 
-  async datalabShoppingCategoryDevice(
-    params: DatalabShoppingCategoryRequest
-  ): Promise<any> {
+  async datalabShoppingByDevice(
+    params: DatalabShoppingDeviceRequest
+  ): Promise<DatalabShoppingResponse> {
     return this.post("datalab", "/shopping/category/device", params);
   }
 
-  async datalabShoppingCategoryGender(
-    params: DatalabShoppingCategoryRequest
-  ): Promise<any> {
+  async datalabShoppingByGender(
+    params: DatalabShoppingGenderRequest
+  ): Promise<DatalabShoppingResponse> {
     return this.post("datalab", "/shopping/category/gender", params);
   }
 
-  async datalabShoppingCategoryAge(
-    params: DatalabShoppingCategoryRequest
-  ): Promise<any> {
+  async datalabShoppingByAge(
+    params: DatalabShoppingAgeRequest
+  ): Promise<DatalabShoppingResponse> {
     return this.post("datalab", "/shopping/category/age", params);
   }
 
   async datalabShoppingKeywords(
-    params: DatalabShoppingKeywordRequest
-  ): Promise<any> {
-    // API 요청 형식에 맞게 데이터 변환
-    const requestData = {
-      startDate: params.startDate,
-      endDate: params.endDate,
-      timeUnit: params.timeUnit,
-      category: params.category,
-      keyword: params.keyword,
-      device: params.device || "",
-      gender: params.gender || "",
-      ages: params.ages || [],
-    };
-
-    return this.post("datalab", "/shopping/category/keywords", requestData);
+    params: DatalabShoppingKeywordsRequest
+  ): Promise<DatalabShoppingResponse> {
+    return this.post("datalab", "/shopping/category/keywords", params);
   }
 
-  async datalabShoppingKeywordDevice(
+  async datalabShoppingKeywordByDevice(
     params: DatalabShoppingKeywordRequest
-  ): Promise<any> {
-    // API 요청 형식에 맞게 데이터 변환
-    const requestData = {
-      startDate: params.startDate,
-      endDate: params.endDate,
-      timeUnit: params.timeUnit,
-      category: params.category,
-      keyword: params.keyword,
-      device: params.device || "",
-    };
-
-    return this.post(
-      "datalab",
-      "/shopping/category/keyword/device",
-      requestData
-    );
+  ): Promise<DatalabShoppingResponse> {
+    return this.post("datalab", "/shopping/category/keyword/device", params);
   }
 
-  async datalabShoppingKeywordGender(
+  async datalabShoppingKeywordByGender(
     params: DatalabShoppingKeywordRequest
-  ): Promise<any> {
-    // API 요청 형식에 맞게 데이터 변환
-    const requestData = {
-      startDate: params.startDate,
-      endDate: params.endDate,
-      timeUnit: params.timeUnit,
-      category: params.category,
-      keyword: params.keyword,
-      gender: params.gender || "",
-    };
-
-    return this.post(
-      "datalab",
-      "/shopping/category/keyword/gender",
-      requestData
-    );
+  ): Promise<DatalabShoppingResponse> {
+    return this.post("datalab", "/shopping/category/keyword/gender", params);
   }
 
-  async datalabShoppingKeywordAge(
+  async datalabShoppingKeywordByAge(
     params: DatalabShoppingKeywordRequest
-  ): Promise<any> {
-    // API 요청 형식에 맞게 데이터 변환
-    const requestData = {
-      startDate: params.startDate,
-      endDate: params.endDate,
-      timeUnit: params.timeUnit,
-      category: params.category,
-      keyword: params.keyword,
-      ages: params.ages || [],
-    };
-
-    return this.post("datalab", "/shopping/category/keyword/age", requestData);
+  ): Promise<DatalabShoppingResponse> {
+    return this.post("datalab", "/shopping/category/keyword/age", params);
   }
 
   /**
