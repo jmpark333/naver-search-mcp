@@ -279,7 +279,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: "search_doc",
-        description: "Perform a search on Naver Document DB. (네이버 웹문서 검색)",
+        description: "Perform a search on Naver Document DB. (네이버 전문자료 검색)",
         inputSchema: zodToJsonSchema(NaverDocumentSearchParamsSchema),
       },
       {
@@ -567,6 +567,19 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           keyword: params.keyword,
           ages: params.ages,
         });
+        break;
+      }
+
+      case "search_doc": {
+        const params = NaverDocumentSearchParamsSchema.parse(args);
+        result = await client.searchDoc(params);
+        break;
+      }
+
+      case "search_encyc": {
+        const params = SearchArgsSchema.parse(args);
+        const type = name.replace("search_", "") as NaverSearchType;
+        result = await client.search({ type, ...params });
         break;
       }
 

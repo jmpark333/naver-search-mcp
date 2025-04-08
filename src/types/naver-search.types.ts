@@ -11,7 +11,6 @@ export const NaverSearchTypeSchema = z.enum([
   "kin",
   "book",
   "cafearticle",
-  "academic",
   "local",
 ]);
 
