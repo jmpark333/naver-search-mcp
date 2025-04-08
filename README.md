@@ -1,8 +1,12 @@
 # Naver Search MCP Server
 
-An MCP server that enables searching various content using the Naver Search API.
+[![smithery badge](https://smithery.ai/badge/@isnow890/naver-search-mcp)](https://smithery.ai/server/@isnow890/naver-search-mcp)
+
+An MCP server that enables searching various content using the Naver Search API, analyzing data with Datalab, and utilizing Vision API capabilities.
 
 ## Features
+
+### Search Features
 
 - News Search
 - Blog Search
@@ -14,6 +18,19 @@ An MCP server that enables searching various content using the Naver Search API.
 - Web Document Search
 - Academic Article Search
 - Cafe Post Search
+
+### Datalab Features
+
+- Search Term Trend Analysis
+- Shopping Category Trends
+- Device-specific Shopping Trends (PC/Mobile)
+- Shopping Trends by Gender/Age Groups
+- Shopping Keyword Trends
+
+### Vision API Features
+
+- Celebrity Face Detection
+- Face Similarity Analysis
 
 ## Installation and Execution
 
@@ -106,13 +123,55 @@ Or if using Docker:
 - **search_image**: Image search
 - **search_kin**: Knowledge-iN search
 - **search_book**: Book search
+- **search_encyc**: Encyclopedia search
+- **search_doc**: Web document search
+- **search_academic**: Academic article search
+- **search_cafe**: Cafe post search
 
-Each tool accepts the following parameters:
+Each search tool accepts the following parameters:
 
 - `query`: Search term
 - `display`: Number of results to display (default: 10)
 - `start`: Starting position for search results (default: 1)
 - `sort`: Sort method (sim: by similarity, date: by date)
+
+### Datalab Tools
+
+- **datalab_search_trend**
+
+  - Analyze search term trends
+  - Parameters:
+    - `startDate`: Analysis start date (YYYY-MM-DD)
+    - `endDate`: Analysis end date (YYYY-MM-DD)
+    - `timeUnit`: Time unit for analysis (date, week, month)
+    - `keywords`: List of keywords to analyze
+    - `category`: Category to analyze within
+
+- **datalab_shopping_trend**
+  - Analyze shopping trends
+  - Parameters:
+    - `startDate`: Analysis start date (YYYY-MM-DD)
+    - `endDate`: Analysis end date (YYYY-MM-DD)
+    - `timeUnit`: Time unit for analysis (date, week, month)
+    - `category`: Shopping category
+    - `device`: Device type (pc, mobile, all)
+    - `gender`: Gender filter (m, f, a)
+    - `ages`: Age groups to analyze
+
+### Vision API Tools
+
+- **vision_face**
+
+  - Detect and analyze faces in images
+  - Parameters:
+    - `image`: Image URL or Base64 encoded image
+    - `mode`: Analysis mode (face, celebrity)
+
+- **vision_face_compare**
+  - Compare faces for similarity
+  - Parameters:
+    - `image1`: First image URL or Base64 encoded image
+    - `image2`: Second image URL or Base64 encoded image
 
 ## Build
 
