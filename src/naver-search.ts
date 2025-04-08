@@ -4,6 +4,10 @@ import {
   NaverSearchConfig,
   NaverSearchParams,
   NaverSearchResponse,
+  DatalabSearchRequest,
+  DatalabShoppingRequest,
+  VisionCelebrityRequest,
+  VisionCelebrityResponse,
 } from "./types/naver-search.types.js";
 
 export class NaverSearchClient {
@@ -85,6 +89,58 @@ export class NaverSearchClient {
 
   async searchBook(params: NaverSearchParams) {
     return this.search("book", params);
+  }
+
+  // DataLab Search API
+  async searchTrend(params: DatalabSearchRequest): Promise<any> {
+    return this.post("/v1/datalab/search", params);
+  }
+
+  // DataLab Shopping APIs
+  async shoppingCategoryTrend(params: DatalabShoppingRequest): Promise<any> {
+    return this.post("/v1/datalab/shopping/categories", params);
+  }
+
+  async shoppingCategoryByDevice(params: DatalabShoppingRequest): Promise<any> {
+    return this.post("/v1/datalab/shopping/category/device", params);
+  }
+
+  async shoppingCategoryByGender(params: DatalabShoppingRequest): Promise<any> {
+    return this.post("/v1/datalab/shopping/category/gender", params);
+  }
+
+  async shoppingCategoryByAge(params: DatalabShoppingRequest): Promise<any> {
+    return this.post("/v1/datalab/shopping/category/age", params);
+  }
+
+  async shoppingCategoryKeywords(params: DatalabShoppingRequest): Promise<any> {
+    return this.post("/v1/datalab/shopping/category/keywords", params);
+  }
+
+  async shoppingKeywordByDevice(params: DatalabShoppingRequest): Promise<any> {
+    return this.post("/v1/datalab/shopping/category/keyword/device", params);
+  }
+
+  async shoppingKeywordByGender(params: DatalabShoppingRequest): Promise<any> {
+    return this.post("/v1/datalab/shopping/category/keyword/gender", params);
+  }
+
+  async shoppingKeywordByAge(params: DatalabShoppingRequest): Promise<any> {
+    return this.post("/v1/datalab/shopping/category/keyword/age", params);
+  }
+
+  // Vision API
+  async detectCelebrity(
+    params: VisionCelebrityRequest
+  ): Promise<VisionCelebrityResponse> {
+    return this.post("/v1/vision/celebrity", params);
+  }
+
+  private async post(endpoint: string, data: any): Promise<any> {
+    const response = await axios.post(`${this.baseUrl}${endpoint}`, data, {
+      headers: this.getHeaders(),
+    });
+    return response.data;
   }
 }
 

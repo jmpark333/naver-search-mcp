@@ -50,3 +50,47 @@ export interface NaverSearchResponse {
     [key: string]: any;
   }>;
 }
+
+// DataLab Search Types
+export interface DatalabSearchRequest {
+  startDate: string; // 조회 기간 시작날짜(yyyy-mm-dd)
+  endDate: string; // 조회 기간 종료날짜(yyyy-mm-dd)
+  timeUnit: "date" | "week" | "month"; // 구간 단위
+  keywordGroups: Array<{
+    groupName: string;
+    keywords: string[];
+  }>;
+}
+
+// DataLab Shopping Types
+export interface DatalabShoppingRequest {
+  startDate: string;
+  endDate: string;
+  timeUnit: "date" | "week" | "month";
+  category: string; // 쇼핑 분야 코드
+  keyword?: string; // 검색어 (키워드 관련 API에서 사용)
+  device?: "pc" | "mo"; // 기기별 조회시 사용
+  gender?: "f" | "m"; // 성별 조회시 사용
+  ages?: string[]; // 연령별 조회시 사용 (예: ["10","20","30"])
+}
+
+// Vision Celebrity Types
+export interface VisionCelebrityRequest {
+  image: string; // Base64 인코딩된 이미지 데이터
+}
+
+export interface VisionCelebrityResponse {
+  info: {
+    size: {
+      width: number;
+      height: number;
+    };
+    faceCount: number;
+  };
+  faces: Array<{
+    celebrity: {
+      value: string;
+      confidence: number;
+    };
+  }>;
+}

@@ -60,6 +60,45 @@ export class NaverSearchClient {
     async searchBook(params) {
         return this.search("book", params);
     }
+    // DataLab Search API
+    async searchTrend(params) {
+        return this.post("/v1/datalab/search", params);
+    }
+    // DataLab Shopping APIs
+    async shoppingCategoryTrend(params) {
+        return this.post("/v1/datalab/shopping/categories", params);
+    }
+    async shoppingCategoryByDevice(params) {
+        return this.post("/v1/datalab/shopping/category/device", params);
+    }
+    async shoppingCategoryByGender(params) {
+        return this.post("/v1/datalab/shopping/category/gender", params);
+    }
+    async shoppingCategoryByAge(params) {
+        return this.post("/v1/datalab/shopping/category/age", params);
+    }
+    async shoppingCategoryKeywords(params) {
+        return this.post("/v1/datalab/shopping/category/keywords", params);
+    }
+    async shoppingKeywordByDevice(params) {
+        return this.post("/v1/datalab/shopping/category/keyword/device", params);
+    }
+    async shoppingKeywordByGender(params) {
+        return this.post("/v1/datalab/shopping/category/keyword/gender", params);
+    }
+    async shoppingKeywordByAge(params) {
+        return this.post("/v1/datalab/shopping/category/keyword/age", params);
+    }
+    // Vision API
+    async detectCelebrity(params) {
+        return this.post("/v1/vision/celebrity", params);
+    }
+    async post(endpoint, data) {
+        const response = await axios.post(`${this.baseUrl}${endpoint}`, data, {
+            headers: this.getHeaders(),
+        });
+        return response.data;
+    }
 }
 NaverSearchClient.instance = null;
 export class NaverSearchMCP {
