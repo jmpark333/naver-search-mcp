@@ -5,10 +5,33 @@ author: "Naver Search MCP Team"
 license: "MIT"
 repository: "https://github.com/your-username/mcp-naver-search"
 
+# Smithery.ai configuration
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    required: ["NAVER_CLIENT_ID", "NAVER_CLIENT_SECRET"]
+    properties:
+      NAVER_CLIENT_ID:
+        type: string
+        description: "Naver API Client ID"
+      NAVER_CLIENT_SECRET:
+        type: string
+        description: "Naver API Client Secret"
+  commandFunction: |-
+    (config) => ({
+      command: "node",
+      args: ["dist/src/index.js"],
+      env: {
+        NAVER_CLIENT_ID: config.NAVER_CLIENT_ID,
+        NAVER_CLIENT_SECRET: config.NAVER_CLIENT_SECRET
+      }
+    })
+
 build:
   type: "docker"
   dockerfile: "./Dockerfile"
-  context: "."
+  dockerBuildPath: "."
 
 runtime:
   type: "mcp"

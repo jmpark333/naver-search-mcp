@@ -2,15 +2,21 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# 소스 코드 복사
+# Copy package files
 COPY package*.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy source code
 COPY tsconfig.json ./
 COPY src ./src
 
-# 의존성 설치 및 빌드
-RUN npm ci && \
-    npm run build && \
-    npm prune --production
+# Build TypeScript code
+RUN npm run build
 
-# 실행
+# Remove dev dependencies
+RUN npm prune --production
+
+# Run the server
 CMD ["node", "dist/src/index.js"] 
