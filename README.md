@@ -1,23 +1,23 @@
-# 네이버 검색 MCP 서버
+# Naver Search MCP Server
 
-네이버 검색 API를 사용하여 다양한 컨텐츠를 검색할 수 있는 MCP 서버입니다.
+An MCP server that enables searching various content using the Naver Search API.
 
-## 기능
+## Features
 
-- 뉴스 검색
-- 블로그 검색
-- 쇼핑 검색
-- 이미지 검색
-- 지식iN 검색
-- 책 검색
-- 백과사전 검색
-- 웹문서 검색
-- 전문정보 검색
-- 카페글 검색
+- News Search
+- Blog Search
+- Shopping Search
+- Image Search
+- Knowledge-iN Search
+- Book Search
+- Encyclopedia Search
+- Web Document Search
+- Academic Article Search
+- Cafe Post Search
 
-## 설치 및 실행
+## Installation and Execution
 
-### 환경 변수 설정
+### Environment Variables Setup
 
 ```bash
 # Windows
@@ -29,13 +29,13 @@ export NAVER_CLIENT_ID=your_client_id
 export NAVER_CLIENT_SECRET=your_client_secret
 ```
 
-### NPX로 실행
+### Run with NPX
 
 ```bash
 npx @modelcontextprotocol/server-naver-search
 ```
 
-### Docker로 실행
+### Run with Docker
 
 ```bash
 docker run -i --rm \
@@ -44,9 +44,9 @@ docker run -i --rm \
   mcp/naver-search
 ```
 
-## Cursor Desktop 설정
+## Cursor Desktop Configuration
 
-`claude_desktop_config.json`에 다음을 추가하세요:
+Add the following to your `claude_desktop_config.json`:
 
 ```json
 {
@@ -63,7 +63,7 @@ docker run -i --rm \
 }
 ```
 
-또는 Docker를 사용하는 경우:
+Or if using Docker:
 
 ```json
 {
@@ -85,43 +85,43 @@ docker run -i --rm \
 }
 ```
 
-## 도구
+## Tools
 
-### 통합 검색
+### Unified Search
 
 - **search**
-  - 모든 타입의 검색을 수행할 수 있는 통합 검색 도구
-  - 입력:
-    - `type`: 검색 타입 (news, blog, shop 등)
-    - `query`: 검색어
-    - `display`: 검색 결과 출력 건수 (기본값: 10)
-    - `start`: 검색 시작 위치 (기본값: 1)
-    - `sort`: 정렬 방식 (sim: 유사도순, date: 날짜순)
+  - A unified search tool that can perform searches for all content types
+  - Parameters:
+    - `type`: Search type (news, blog, shop, etc.)
+    - `query`: Search term
+    - `display`: Number of results to display (default: 10)
+    - `start`: Starting position for search results (default: 1)
+    - `sort`: Sort method (sim: by similarity, date: by date)
 
-### 개별 검색 도구들
+### Individual Search Tools
 
-- **search_news**: 뉴스 검색
-- **search_blog**: 블로그 검색
-- **search_shop**: 쇼핑 검색
-- **search_image**: 이미지 검색
-- **search_kin**: 지식iN 검색
-- **search_book**: 책 검색
+- **search_news**: News search
+- **search_blog**: Blog search
+- **search_shop**: Shopping search
+- **search_image**: Image search
+- **search_kin**: Knowledge-iN search
+- **search_book**: Book search
 
-각 도구는 다음 매개변수를 받습니다:
+Each tool accepts the following parameters:
 
-- `query`: 검색어
-- `display`: 검색 결과 출력 건수 (기본값: 10)
-- `start`: 검색 시작 위치 (기본값: 1)
-- `sort`: 정렬 방식 (sim: 유사도순, date: 날짜순)
+- `query`: Search term
+- `display`: Number of results to display (default: 10)
+- `start`: Starting position for search results (default: 1)
+- `sort`: Sort method (sim: by similarity, date: by date)
 
-## 빌드
+## Build
 
-Docker 빌드:
+Docker build:
 
 ```bash
 docker build -t mcp/naver-search .
 ```
 
-## 라이선스
+## License
 
 MIT License
