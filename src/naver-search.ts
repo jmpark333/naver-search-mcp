@@ -6,7 +6,6 @@ import {
   NaverSearchResponse,
   DatalabSearchRequest,
   DatalabShoppingResponse,
-  NaverWebSearchParams,
   DatalabShoppingCategoryRequest,
   DatalabShoppingDeviceRequest,
   DatalabShoppingGenderRequest,
@@ -21,8 +20,8 @@ import {
 } from "./types/naver-search.types.js";
 
 /**
- * NaverSearchClient - A singleton client for interacting with Naver's APIs
- * Handles search, DataLab, and Vision API requests
+ * NaverSearchClient - 네이버 API 서비스를 위한 싱글톤 클라이언트
+ * 검색, 데이터랩 API 요청 처리
  */
 export class NaverSearchClient {
   private static instance: NaverSearchClient | null = null;
@@ -33,7 +32,7 @@ export class NaverSearchClient {
   private constructor() {}
 
   /**
-   * Get singleton instance of NaverSearchClient
+   * 싱글톤 인스턴스 반환
    */
   static getInstance(): NaverSearchClient {
     if (!NaverSearchClient.instance) {
@@ -43,15 +42,15 @@ export class NaverSearchClient {
   }
 
   /**
-   * Initialize client with API credentials
+   * API 자격 증명으로 클라이언트 초기화
    */
   initialize(config: NaverSearchConfig) {
     this.config = config;
   }
 
   /**
-   * Get headers required for API requests
-   * @throws Error if client is not initialized
+   * API 요청에 필요한 헤더 생성
+   * @throws 클라이언트가 초기화되지 않은 경우 에러 발생
    */
   private getHeaders(
     contentType: string = "application/json"
@@ -70,7 +69,7 @@ export class NaverSearchClient {
   }
 
   /**
-   * Generic search method that supports all search types
+   * 모든 검색 유형을 지원하는 일반 검색 메서드
    */
   async search<T extends NaverSearchResponse, P extends NaverSearchParams = NaverSearchParams>(
     params: P & { type: NaverSearchType }
@@ -86,55 +85,18 @@ export class NaverSearchClient {
     return response.data;
   }
 
-  // Convenience methods for specific search types
-  async searchNews(
-    query: string,
-    params?: Omit<NaverSearchParams, "query">
-  ): Promise<NaverSearchResponse> {
-    return this.search<NaverSearchResponse>({ type: "news", query, ...params });
-  }
-
-  async searchBlog(params: NaverSearchParams) {
-    return this.search<NaverSearchResponse>({ type: "blog", ...params });
-  }
-
-  async searchShop(params: NaverSearchParams) {
-    return this.search<NaverSearchResponse>({ type: "shop", ...params });
-  }
-
-  async searchImage(params: NaverSearchParams) {
-    return this.search<NaverSearchResponse>({ type: "image", ...params });
-  }
-
-  async searchKin(params: NaverSearchParams) {
-    return this.search<NaverSearchResponse>({ type: "kin", ...params });
-  }
-
-  async searchBook(params: NaverSearchParams) {
-    return this.search<NaverSearchResponse>({ type: "book", ...params });
-  }
-
   /**
-   * @deprecated Use searchAcademic instead
+   * 전문자료 검색 메서드
    */
-  async searchDoc(
-    params: NaverDocumentSearchParams
-  ): Promise<NaverDocumentSearchResponse> {
-    return this.searchAcademic(params);
-  }
-
   async searchAcademic(
     params: NaverDocumentSearchParams
   ): Promise<NaverDocumentSearchResponse> {
     return this.search<NaverDocumentSearchResponse>({ type: "doc", ...params });
   }
 
-  async searchEncyc(
-    params: NaverSearchParams
-  ): Promise<NaverEncyclopediaSearchResponse> {
-    return this.search<NaverEncyclopediaSearchResponse>({ type: "encyc", ...params });
-  }
-
+  /**
+   * 지역 검색 메서드
+   */
   async searchLocal(
     params: NaverLocalSearchParams
   ): Promise<NaverLocalSearchResponse> {
@@ -148,58 +110,79 @@ export class NaverSearchClient {
     return response.data;
   }
 
-  async searchWeb(params: NaverWebSearchParams): Promise<NaverSearchResponse> {
-    return this.search<NaverSearchResponse>({ type: "webkr", ...params });
-  }
-
-  // DataLab Search API methods
+  /**
+   * 검색어 트렌드 분석 메서드
+   */
   async searchTrend(params: DatalabSearchRequest): Promise<any> {
     return this.post("datalab", "/search", params);
   }
 
-  // DataLab Shopping API methods
+  /**
+   * 쇼핑 카테고리 트렌드 분석 메서드
+   */
   async datalabShoppingCategory(
     params: DatalabShoppingCategoryRequest
   ): Promise<DatalabShoppingResponse> {
     return this.post("datalab", "/shopping/categories", params);
   }
 
+  /**
+   * 쇼핑 기기별 트렌드 분석 메서드
+   */
   async datalabShoppingByDevice(
     params: DatalabShoppingDeviceRequest
   ): Promise<DatalabShoppingResponse> {
     return this.post("datalab", "/shopping/category/device", params);
   }
 
+  /**
+   * 쇼핑 성별 트렌드 분석 메서드
+   */
   async datalabShoppingByGender(
     params: DatalabShoppingGenderRequest
   ): Promise<DatalabShoppingResponse> {
     return this.post("datalab", "/shopping/category/gender", params);
   }
 
+  /**
+   * 쇼핑 연령별 트렌드 분석 메서드
+   */
   async datalabShoppingByAge(
     params: DatalabShoppingAgeRequest
   ): Promise<DatalabShoppingResponse> {
     return this.post("datalab", "/shopping/category/age", params);
   }
 
+  /**
+   * 쇼핑 키워드 트렌드 분석 메서드
+   */
   async datalabShoppingKeywords(
     params: DatalabShoppingKeywordsRequest
   ): Promise<DatalabShoppingResponse> {
     return this.post("datalab", "/shopping/category/keywords", params);
   }
 
+  /**
+   * 쇼핑 키워드 기기별 트렌드 분석 메서드
+   */
   async datalabShoppingKeywordByDevice(
     params: DatalabShoppingKeywordRequest
   ): Promise<DatalabShoppingResponse> {
     return this.post("datalab", "/shopping/category/keyword/device", params);
   }
 
+  /**
+   * 쇼핑 키워드 성별 트렌드 분석 메서드
+   */
   async datalabShoppingKeywordByGender(
     params: DatalabShoppingKeywordRequest
   ): Promise<DatalabShoppingResponse> {
     return this.post("datalab", "/shopping/category/keyword/gender", params);
   }
 
+  /**
+   * 쇼핑 키워드 연령별 트렌드 분석 메서드
+   */
   async datalabShoppingKeywordByAge(
     params: DatalabShoppingKeywordRequest
   ): Promise<DatalabShoppingResponse> {
@@ -207,10 +190,10 @@ export class NaverSearchClient {
   }
 
   /**
-   * Generic POST request handler
-   * @param apiType - Type of API to use (search, datalab)
-   * @param endpoint - API endpoint
-   * @param data - Request data
+   * POST 요청 처리 헬퍼 메서드
+   * @param apiType - API 유형 (search, datalab)
+   * @param endpoint - API 엔드포인트
+   * @param data - 요청 데이터
    */
   private async post(
     apiType: "search" | "datalab",
