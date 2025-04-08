@@ -11,11 +11,14 @@ import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import {
   NaverSearchTypeSchema,
+  NaverSearchType,
   NaverSearchParamsSchema,
   NaverSearchConfigSchema,
-  NaverSearchType,
+  NaverSearchParams,
   DatalabSearchRequest,
   // VisionCelebrityRequest,
+  NaverLocalSearchParamsSchema,
+  NaverDocumentSearchParamsSchema,
 } from "./types/naver-search.types.js";
 import { NaverSearchClient } from "./naver-search.js";
 import fs from "fs";
@@ -243,54 +246,74 @@ const DatalabSearchSchema = DatalabBaseSchema.extend({
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
     tools: [
+      // 네이버 검색 API - 기본 검색 기능
       {
         name: "search_news",
-        description: "Perform a search on Naver News.",
+        description: "Perform a search on Naver News. (네이버 뉴스 검색)",
         inputSchema: zodToJsonSchema(SearchArgsSchema),
       },
       {
         name: "search_blog",
-        description: "Perform a search on Naver Blog.",
+        description: "Perform a search on Naver Blog. (네이버 블로그 검색)",
         inputSchema: zodToJsonSchema(SearchArgsSchema),
       },
       {
         name: "search_shop",
-        description: "Perform a search on Naver Shopping.",
+        description: "Perform a search on Naver Shopping. (네이버 쇼핑 검색)",
         inputSchema: zodToJsonSchema(SearchArgsSchema),
       },
       {
         name: "search_image",
-        description: "Perform a search on Naver Image.",
+        description: "Perform a search on Naver Image. (네이버 이미지 검색)",
         inputSchema: zodToJsonSchema(SearchArgsSchema),
       },
       {
         name: "search_kin",
-        description: "Perform a search on Naver KnowledgeiN.",
+        description: "Perform a search on Naver KnowledgeiN. (네이버 지식iN 검색)",
         inputSchema: zodToJsonSchema(SearchArgsSchema),
       },
       {
         name: "search_book",
-        description: "Perform a search on Naver Book.",
+        description: "Perform a search on Naver Book. (네이버 책 검색)",
         inputSchema: zodToJsonSchema(SearchArgsSchema),
       },
       {
         name: "search_doc",
-        description: "Perform a search on Naver Document DB.",
+        description: "Perform a search on Naver Document DB. (네이버 웹문서 검색)",
+        inputSchema: zodToJsonSchema(NaverDocumentSearchParamsSchema),
+      },
+      {
+        name: "search_encyc",
+        description: "Perform a search on Naver Encyclopedia. (네이버 지식백과 검색)",
         inputSchema: zodToJsonSchema(SearchArgsSchema),
       },
       {
-        name: "datalab_search",
-        description: "Perform a trend analysis on Naver search keywords.",
-        inputSchema: zodToJsonSchema(DatalabSearchSchema),
+        name: "search_academic",
+        description: "Perform a search on Naver Academic. (네이버 전문자료 검색)",
+        inputSchema: zodToJsonSchema(SearchArgsSchema),
       },
       {
+        name: "search_local",
+        description: "Perform a search on Naver Local. (네이버 지역 검색)",
+        inputSchema: zodToJsonSchema(NaverLocalSearchParamsSchema),
+      },
+
+      // 네이버 데이터랩 API - 검색어 트렌드 분석
+      {
+        name: "datalab_search",
+        description: "Perform a trend analysis on Naver search keywords. (네이버 검색어 트렌드 분석)",
+        inputSchema: zodToJsonSchema(DatalabSearchSchema),
+      },
+
+      // 네이버 데이터랩 API - 쇼핑인사이트 분석
+      {
         name: "datalab_shopping_category",
-        description: "Perform a trend analysis on Naver Shopping category.",
+        description: "Perform a trend analysis on Naver Shopping category. (네이버 쇼핑 카테고리별 트렌드 분석)",
         inputSchema: zodToJsonSchema(DatalabShoppingSchema),
       },
       {
         name: "datalab_shopping_by_device",
-        description: "Perform a trend analysis on Naver Shopping by device.",
+        description: "Perform a trend analysis on Naver Shopping by device. (네이버 쇼핑 기기별 트렌드 분석)",
         inputSchema: zodToJsonSchema(
           DatalabShoppingDeviceSchema.pick({
             startDate: true,
@@ -303,7 +326,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: "datalab_shopping_by_gender",
-        description: "Perform a trend analysis on Naver Shopping by gender.",
+        description: "Perform a trend analysis on Naver Shopping by gender. (네이버 쇼핑 성별 트렌드 분석)",
         inputSchema: zodToJsonSchema(
           DatalabShoppingGenderSchema.pick({
             startDate: true,
@@ -316,7 +339,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: "datalab_shopping_by_age",
-        description: "Perform a trend analysis on Naver Shopping by age.",
+        description: "Perform a trend analysis on Naver Shopping by age. (네이버 쇼핑 연령별 트렌드 분석)",
         inputSchema: zodToJsonSchema(
           DatalabShoppingAgeSchema.pick({
             startDate: true,
@@ -327,32 +350,24 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           })
         ),
       },
-      // {
-      //   name: "vision_celebrity",
-      //   description: "이미지에서 유명인을 감지합니다.",
-      //   inputSchema: zodToJsonSchema(vision_celebrity.schema),
-      // },
       {
         name: "datalab_shopping_keywords",
-        description: "Perform a trend analysis on Naver Shopping keywords.",
+        description: "Perform a trend analysis on Naver Shopping keywords. (네이버 쇼핑 키워드별 트렌드 분석)",
         inputSchema: zodToJsonSchema(DatalabShoppingKeywordsSchema),
       },
       {
         name: "datalab_shopping_keyword_by_device",
-        description:
-          "Perform a trend analysis on Naver Shopping keywords by device.",
+        description: "Perform a trend analysis on Naver Shopping keywords by device. (네이버 쇼핑 키워드 기기별 트렌드 분석)",
         inputSchema: zodToJsonSchema(DatalabShoppingKeywordDeviceSchema),
       },
       {
         name: "datalab_shopping_keyword_by_gender",
-        description:
-          "Perform a trend analysis on Naver Shopping keywords by gender.",
+        description: "Perform a trend analysis on Naver Shopping keywords by gender. (네이버 쇼핑 키워드 성별 트렌드 분석)",
         inputSchema: zodToJsonSchema(DatalabShoppingKeywordGenderSchema),
       },
       {
         name: "datalab_shopping_keyword_by_age",
-        description:
-          "Perform a trend analysis on Naver Shopping keywords by age.",
+        description: "Perform a trend analysis on Naver Shopping keywords by age. (네이버 쇼핑 키워드 연령별 트렌드 분석)",
         inputSchema: zodToJsonSchema(DatalabShoppingKeywordAgeSchema),
       },
     ],
@@ -422,10 +437,18 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       case "search_image":
       case "search_kin":
       case "search_book":
-      case "search_doc": {
+      case "search_doc":
+      case "search_encyc":
+      case "search_academic": {
         const params = SearchArgsSchema.parse(args);
         const type = name.replace("search_", "") as NaverSearchType;
         result = await client.search({ type, ...params });
+        break;
+      }
+
+      case "search_local": {
+        const params = NaverLocalSearchParamsSchema.parse(args);
+        result = await client.searchLocal(params);
         break;
       }
 

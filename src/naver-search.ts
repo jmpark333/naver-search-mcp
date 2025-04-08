@@ -14,6 +14,10 @@ import {
   DatalabShoppingKeywordsRequest,
   DatalabShoppingKeywordRequest,
   NaverDocumentSearchResponse,
+  NaverEncyclopediaSearchResponse,
+  NaverLocalSearchResponse,
+  NaverLocalSearchParams,
+  NaverDocumentSearchParams,
 } from "./types/naver-search.types.js";
 
 /**
@@ -68,11 +72,11 @@ export class NaverSearchClient {
   /**
    * Generic search method that supports all search types
    */
-  async search(
-    params: NaverSearchParams & { type: NaverSearchType }
-  ): Promise<NaverSearchResponse> {
+  async search<T extends NaverSearchResponse, P extends NaverSearchParams = NaverSearchParams>(
+    params: P & { type: NaverSearchType }
+  ): Promise<T> {
     const { type, ...searchParams } = params;
-    const response = await axios.get<NaverSearchResponse>(
+    const response = await axios.get<T>(
       `${this.searchBaseUrl}/${type}`,
       {
         params: searchParams,
@@ -87,37 +91,63 @@ export class NaverSearchClient {
     query: string,
     params?: Omit<NaverSearchParams, "query">
   ): Promise<NaverSearchResponse> {
-    return this.search({ type: "news", query, ...params });
+    return this.search<NaverSearchResponse>({ type: "news", query, ...params });
   }
 
   async searchBlog(params: NaverSearchParams) {
-    return this.search({ type: "blog", ...params });
+    return this.search<NaverSearchResponse>({ type: "blog", ...params });
   }
 
   async searchShop(params: NaverSearchParams) {
-    return this.search({ type: "shop", ...params });
+    return this.search<NaverSearchResponse>({ type: "shop", ...params });
   }
 
   async searchImage(params: NaverSearchParams) {
-    return this.search({ type: "image", ...params });
+    return this.search<NaverSearchResponse>({ type: "image", ...params });
   }
 
   async searchKin(params: NaverSearchParams) {
-    return this.search({ type: "kin", ...params });
+    return this.search<NaverSearchResponse>({ type: "kin", ...params });
   }
 
   async searchBook(params: NaverSearchParams) {
-    return this.search({ type: "book", ...params });
+    return this.search<NaverSearchResponse>({ type: "book", ...params });
   }
 
   async searchDoc(
-    params: NaverSearchParams
+    params: NaverDocumentSearchParams
   ): Promise<NaverDocumentSearchResponse> {
-    return this.search({ type: "doc", ...params });
+    const response = await axios.get<NaverDocumentSearchResponse>(
+      `${this.searchBaseUrl}/doc`,
+      {
+        params: { ...params },
+        ...this.getHeaders(),
+      }
+    );
+    return response.data;
+  }
+
+  async searchEncyc(
+    params: NaverSearchParams
+  ): Promise<NaverEncyclopediaSearchResponse> {
+    return this.search<NaverEncyclopediaSearchResponse>({ type: "encyc", ...params });
+  }
+
+  async searchLocal(
+    params: NaverLocalSearchParams
+  ): Promise<NaverLocalSearchResponse> {
+    const response = await axios.get<NaverLocalSearchResponse>(
+      `${this.searchBaseUrl}/local`,
+      {
+        params: { ...params },
+        ...this.getHeaders(),
+      }
+    );
+    return response.data;
   }
 
   async searchWeb(params: NaverWebSearchParams): Promise<NaverSearchResponse> {
-    return this.search({ type: "webkr", ...params });
+    return this.search<NaverSearchResponse>({ type: "webkr", ...params });
   }
 
   // DataLab Search API methods

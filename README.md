@@ -1,36 +1,54 @@
-# Naver Search MCP Server
+# Naver Search MCP 서버
 
 [![smithery badge](https://smithery.ai/badge/@isnow890/naver-search-mcp)](https://smithery.ai/server/@isnow890/naver-search-mcp)
 
-An MCP server that enables searching various content using the Naver Search API and analyzing data with Datalab.
+네이버 검색 API를 사용하여 다양한 콘텐츠를 검색하고 데이터랩으로 데이터를 분석할 수 있는 MCP 서버입니다.
 
-## Features
+## API 키 발급 방법
 
-### Search Features
+1. [네이버 개발자 센터](https://developers.naver.com/apps/#/register)에 접속합니다.
+2. 애플리케이션 등록을 클릭합니다.
+3. 애플리케이션 이름을 입력하고, 사용 API에서 다음 항목들을 반드시 모두 선택합니다:
+   - 검색 (검색 API - 블로그, 뉴스, 책 등 검색 기능 사용)
+   - 데이터랩(검색어 트렌드) (검색어 트렌드 분석 기능 사용)
+   - 데이터랩(쇼핑인사이트) (쇼핑 분야 트렌드 분석 기능 사용)
+4. 발급받은 Client ID와 Client Secret을 환경 변수로 설정합니다.
 
-- Unified Search (search)
-- News Search (search_news)
-- Blog Search (search_blog)
-- Shopping Search (search_shop)
-- Image Search (search_image)
-- Knowledge-iN Search (search_kin)
-- Book Search (search_book)
-- Encyclopedia Search (search_encyc)
-- Web Document Search (search_doc)
-- Cafe Article Search (search_cafearticle)
+이 서버는 검색 API와 데이터랩 API를 모두 활용합니다:
+- 검색 API: 블로그, 뉴스, 쇼핑 등 다양한 네이버 서비스 검색
+- 데이터랩 API: 검색어 트렌드와 쇼핑 인사이트를 통한 데이터 분석
 
-### Datalab Features
+## 주요 기능
 
-- Search Term Trend Analysis (datalab_search)
-- Shopping Category Trends (datalab_shopping_category)
-- Device-specific Shopping Trends - PC/Mobile (datalab_shopping_by_device)
-- Shopping Trends by Gender (datalab_shopping_by_gender)
-- Shopping Trends by Age Groups (datalab_shopping_by_age)
-- Shopping Keyword Trends (datalab_shopping_keywords)
+### 검색 기능
 
-## Installation and Execution
+- 통합 검색 (search)
+- 블로그 검색 (search_blog)
+- 뉴스 검색 (search_news)
+- 책 검색 (search_book)
+- 성인 검색어 판별 (search_adult)
+- 백과사전 검색 (search_encyc)
+- 카페글 검색 (search_cafearticle)
+- 지식iN 검색 (search_kin)
+- 지역 검색 (search_local)
+- 오타변환 검색 (search_errata)
+- 웹문서 검색 (search_doc)
+- 이미지 검색 (search_image)
+- 쇼핑 검색 (search_shop)
+- 전문자료 검색 (search_academic)
 
-### Environment Variables Setup
+### 데이터랩 기능
+
+- 검색어 트렌드 분석 (datalab_search)
+- 쇼핑 카테고리 트렌드 (datalab_shopping_category)
+- 기기별 쇼핑 트렌드 - PC/모바일 (datalab_shopping_by_device)
+- 성별 쇼핑 트렌드 (datalab_shopping_by_gender)
+- 연령대별 쇼핑 트렌드 (datalab_shopping_by_age)
+- 쇼핑 키워드 트렌드 (datalab_shopping_keywords)
+
+## 설치 및 실행
+
+### 환경 변수 설정
 
 ```bash
 # Windows
@@ -42,13 +60,13 @@ export NAVER_CLIENT_ID=your_client_id
 export NAVER_CLIENT_SECRET=your_client_secret
 ```
 
-### Run with NPX
+### NPX로 실행
 
 ```bash
 npx @modelcontextprotocol/server-naver-search
 ```
 
-### Run with Docker
+### Docker로 실행
 
 ```bash
 docker run -i --rm \
@@ -57,9 +75,9 @@ docker run -i --rm \
   mcp/naver-search
 ```
 
-## Cursor Desktop Configuration
+## Cursor Desktop 설정
 
-Add the following to your `claude_desktop_config.json`:
+`claude_desktop_config.json`에 다음 내용을 추가하세요:
 
 ```json
 {
@@ -76,7 +94,7 @@ Add the following to your `claude_desktop_config.json`:
 }
 ```
 
-Or if using Docker:
+Docker를 사용하는 경우:
 
 ```json
 {
@@ -98,109 +116,109 @@ Or if using Docker:
 }
 ```
 
-## Tools
+## 도구 설명
 
-### Unified Search
+### 통합 검색
 
 - **search**
-  - A unified search tool that can perform searches for all content types
-  - Parameters:
-    - `type`: Search type (news, blog, shop, etc.)
-    - `query`: Search term (required)
-    - `display`: Number of results to display (default: 10)
-    - `start`: Starting position for search results (default: 1)
-    - `sort`: Sort method (sim: by similarity, date: by date)
+  - 모든 콘텐츠 유형에 대한 통합 검색을 수행할 수 있는 도구
+  - 매개변수:
+    - `type`: 검색 유형 (news, blog, shop 등)
+    - `query`: 검색어 (필수)
+    - `display`: 표시할 결과 수 (기본값: 10)
+    - `start`: 검색 결과 시작 위치 (기본값: 1)
+    - `sort`: 정렬 방법 (sim: 유사도순, date: 날짜순)
 
-### Individual Search Tools
+### 개별 검색 도구
 
-Each search tool accepts the following parameters:
+각 검색 도구는 다음 매개변수를 사용합니다:
 
-- `query`: Search term (required)
-- `display`: Number of results to display (default: 10)
-- `start`: Starting position for search results (default: 1)
-- `sort`: Sort method (sim: by similarity, date: by date)
+- `query`: 검색어 (필수)
+- `display`: 표시할 결과 수 (기본값: 10)
+- `start`: 검색 결과 시작 위치 (기본값: 1)
+- `sort`: 정렬 방법 (sim: 유사도순, date: 날짜순)
 
-Available search tools:
+사용 가능한 검색 도구:
 
-- **search_news**: News search
-- **search_blog**: Blog search
-- **search_shop**: Shopping search
-- **search_image**: Image search
-- **search_kin**: Knowledge-iN search
-- **search_book**: Book search
-- **search_encyc**: Encyclopedia search
-- **search_doc**: Web document search
-- **search_cafearticle**: Cafe article search
+- **search_news**: 뉴스 검색
+- **search_blog**: 블로그 검색
+- **search_shop**: 쇼핑 검색
+- **search_image**: 이미지 검색
+- **search_kin**: 지식iN 검색
+- **search_book**: 책 검색
+- **search_encyc**: 백과사전 검색
+- **search_doc**: 웹문서 검색
+- **search_cafearticle**: 카페글 검색
 
-### Datalab Tools
+### 데이터랩 도구
 
 - **datalab_search**
 
-  - Analyze search term trends
-  - Parameters:
-    - `startDate`: Analysis start date (YYYY-MM-DD)
-    - `endDate`: Analysis end date (YYYY-MM-DD)
-    - `timeUnit`: Time unit for analysis (date, week, month)
-    - `keywordGroups`: Array of keyword groups to analyze
-      - `groupName`: Name of the keyword group
-      - `keywords`: Array of keywords in the group
+  - 검색어 트렌드 분석
+  - 매개변수:
+    - `startDate`: 분석 시작일 (YYYY-MM-DD)
+    - `endDate`: 분석 종료일 (YYYY-MM-DD)
+    - `timeUnit`: 분석 시간 단위 (date: 일간, week: 주간, month: 월간)
+    - `keywordGroups`: 분석할 키워드 그룹 배열
+      - `groupName`: 키워드 그룹 이름
+      - `keywords`: 그룹 내 키워드 배열
 
 - **datalab_shopping_category**
 
-  - Analyze shopping category trends
-  - Parameters:
-    - `startDate`: Analysis start date (YYYY-MM-DD)
-    - `endDate`: Analysis end date (YYYY-MM-DD)
-    - `timeUnit`: Time unit for analysis (date, week, month)
-    - `category`: Shopping category code
+  - 쇼핑 카테고리 트렌드 분석
+  - 매개변수:
+    - `startDate`: 분석 시작일 (YYYY-MM-DD)
+    - `endDate`: 분석 종료일 (YYYY-MM-DD)
+    - `timeUnit`: 분석 시간 단위 (date: 일간, week: 주간, month: 월간)
+    - `category`: 쇼핑 카테고리 코드
 
 - **datalab_shopping_by_device**
 
-  - Analyze shopping trends by device type
-  - Parameters:
-    - `startDate`: Analysis start date (YYYY-MM-DD)
-    - `endDate`: Analysis end date (YYYY-MM-DD)
-    - `timeUnit`: Time unit for analysis (date, week, month)
-    - `category`: Shopping category code
-    - `device`: Device type (pc, mo)
+  - 기기별 쇼핑 트렌드 분석
+  - 매개변수:
+    - `startDate`: 분석 시작일 (YYYY-MM-DD)
+    - `endDate`: 분석 종료일 (YYYY-MM-DD)
+    - `timeUnit`: 분석 시간 단위 (date: 일간, week: 주간, month: 월간)
+    - `category`: 쇼핑 카테고리 코드
+    - `device`: 기기 유형 (pc: PC, mo: 모바일)
 
 - **datalab_shopping_by_gender**
 
-  - Analyze shopping trends by gender
-  - Parameters:
-    - `startDate`: Analysis start date (YYYY-MM-DD)
-    - `endDate`: Analysis end date (YYYY-MM-DD)
-    - `timeUnit`: Time unit for analysis (date, week, month)
-    - `category`: Shopping category code
-    - `gender`: Gender (f, m)
+  - 성별 쇼핑 트렌드 분석
+  - 매개변수:
+    - `startDate`: 분석 시작일 (YYYY-MM-DD)
+    - `endDate`: 분석 종료일 (YYYY-MM-DD)
+    - `timeUnit`: 분석 시간 단위 (date: 일간, week: 주간, month: 월간)
+    - `category`: 쇼핑 카테고리 코드
+    - `gender`: 성별 (f: 여성, m: 남성)
 
 - **datalab_shopping_by_age**
 
-  - Analyze shopping trends by age groups
-  - Parameters:
-    - `startDate`: Analysis start date (YYYY-MM-DD)
-    - `endDate`: Analysis end date (YYYY-MM-DD)
-    - `timeUnit`: Time unit for analysis (date, week, month)
-    - `category`: Shopping category code
-    - `ages`: Array of age groups (e.g. ["10", "20", "30"])
+  - 연령대별 쇼핑 트렌드 분석
+  - 매개변수:
+    - `startDate`: 분석 시작일 (YYYY-MM-DD)
+    - `endDate`: 분석 종료일 (YYYY-MM-DD)
+    - `timeUnit`: 분석 시간 단위 (date: 일간, week: 주간, month: 월간)
+    - `category`: 쇼핑 카테고리 코드
+    - `ages`: 연령대 배열 (예: ["10", "20", "30"])
 
 - **datalab_shopping_keywords**
-  - Analyze shopping keyword trends
-  - Parameters:
-    - `startDate`: Analysis start date (YYYY-MM-DD)
-    - `endDate`: Analysis end date (YYYY-MM-DD)
-    - `timeUnit`: Time unit for analysis (date, week, month)
-    - `category`: Shopping category code
-    - `keyword`: Search keyword
+  - 쇼핑 키워드 트렌드 분석
+  - 매개변수:
+    - `startDate`: 분석 시작일 (YYYY-MM-DD)
+    - `endDate`: 분석 종료일 (YYYY-MM-DD)
+    - `timeUnit`: 분석 시간 단위 (date: 일간, week: 주간, month: 월간)
+    - `category`: 쇼핑 카테고리 코드
+    - `keyword`: 검색 키워드
 
-## Build
+## 빌드
 
-Docker build:
+Docker 빌드:
 
 ```bash
 docker build -t mcp/naver-search .
 ```
 
-## License
+## 라이선스
 
-MIT License
+MIT 라이선스
