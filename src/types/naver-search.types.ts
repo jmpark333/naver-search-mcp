@@ -16,41 +16,45 @@ export const NaverSearchTypeSchema = z.enum([
 export type NaverSearchType = z.infer<typeof NaverSearchTypeSchema>;
 
 export const NaverSearchParamsSchema = z.object({
-  query: z.string().describe("검색어"),
-  display: z.number().optional().describe("검색 결과 출력 건수 (기본값: 10)"),
-  start: z.number().optional().describe("검색 시작 위치 (기본값: 1)"),
+  query: z.string().describe("Search query"),
+  display: z
+    .number()
+    .optional()
+    .describe("Number of results to display (default: 10)"),
+  start: z
+    .number()
+    .optional()
+    .describe("Start position of search results (default: 1)"),
   sort: z
     .enum(["sim", "date"])
     .optional()
-    .describe("정렬 방식 (sim: 유사도순, date: 날짜순)"),
+    .describe("Sort method (sim: similarity, date: chronological)"),
 });
 
 export type NaverSearchParams = z.infer<typeof NaverSearchParamsSchema>;
 
 export const NaverSearchConfigSchema = z.object({
-  clientId: z
-    .string()
-    .describe("네이버 개발자 센터에서 발급받은 클라이언트 ID"),
+  clientId: z.string().describe("Client ID issued by Naver Developer Center"),
   clientSecret: z
     .string()
-    .describe("네이버 개발자 센터에서 발급받은 클라이언트 시크릿"),
+    .describe("Client Secret issued by Naver Developer Center"),
 });
 
 export type NaverSearchConfig = z.infer<typeof NaverSearchConfigSchema>;
 
 export interface NaverSearchResponse {
-  lastBuildDate: string;
-  total: number;
-  start: number;
-  display: number;
+  lastBuildDate: string; // Timestamp when the search results were generated
+  total: number; // Total number of search results
+  start: number; // Start position of search results
+  display: number; // Number of items displayed
   items: NaverSearchItem[];
   isError?: boolean;
 }
 
 export interface NaverSearchItem {
-  title: string;
-  link: string;
-  description: string;
+  title: string; // Item title
+  link: string; // Item URL
+  description: string; // Item description
 }
 
 export interface NaverDocumentSearchResponse extends NaverSearchResponse {
@@ -58,103 +62,103 @@ export interface NaverDocumentSearchResponse extends NaverSearchResponse {
 }
 
 export interface NaverDocumentItem extends NaverSearchItem {
-  title: string; // 문서 제목 (검색어와 일치하는 부분은 <b> 태그로 감싸짐)
-  link: string; // 문서 URL
-  description: string; // 문서 내용 요약 (검색어와 일치하는 부분은 <b> 태그로 감싸짐)
+  title: string; // Document title (search term is wrapped in <b> tags)
+  link: string; // Document URL
+  description: string; // Document summary (search term is wrapped in <b> tags)
 }
 
 // DataLab Search Types
 export interface DatalabSearchRequest {
-  startDate: string;
-  endDate: string;
-  timeUnit: "date" | "week" | "month";
+  startDate: string; // Start date in yyyy-mm-dd format
+  endDate: string; // End date in yyyy-mm-dd format
+  timeUnit: "date" | "week" | "month"; // Time unit for analysis
   keywordGroups: Array<{
-    groupName: string;
-    keywords: string[];
+    groupName: string; // Group name
+    keywords: string[]; // List of keywords in the group
   }>;
 }
 
 export interface DatalabShoppingResponse {
-  startDate: string;
-  endDate: string;
-  timeUnit: string;
+  startDate: string; // Start date of analysis
+  endDate: string; // End date of analysis
+  timeUnit: string; // Time unit used for analysis
   results: {
-    title: string;
-    category?: string[];
-    keyword?: string[];
+    title: string; // Result title
+    category?: string[]; // Category information
+    keyword?: string[]; // Keyword information
     data: {
-      period: string;
-      group?: string;
-      ratio: number;
+      period: string; // Time period
+      group?: string; // Group information
+      ratio: number; // Ratio/percentage value
     }[];
   }[];
 }
 
 export interface NaverWebSearchParams extends NaverSearchParams {
-  type?: "webkr";
+  type?: "webkr"; // Web search type identifier
 }
 
 // DataLab Shopping Category Types
 export interface DatalabShoppingCategoryRequest {
-  startDate: string;
-  endDate: string;
-  timeUnit: "date" | "week" | "month";
+  startDate: string; // Start date in yyyy-mm-dd format
+  endDate: string; // End date in yyyy-mm-dd format
+  timeUnit: "date" | "week" | "month"; // Time unit for analysis
   category: Array<{
-    name: string;
-    param: string[];
+    name: string; // Category name
+    param: string[]; // Category parameters
   }>;
-  device?: "pc" | "mo";
-  gender?: "f" | "m";
-  ages?: string[];
+  device?: "pc" | "mo"; // Device type (pc or mobile)
+  gender?: "f" | "m"; // Gender (female or male)
+  ages?: string[]; // Age groups
 }
 
 // DataLab Shopping Device Types
 export interface DatalabShoppingDeviceRequest {
-  startDate: string;
-  endDate: string;
-  timeUnit: "date" | "week" | "month";
-  category: string;
-  device: "pc" | "mo";
+  startDate: string; // Start date in yyyy-mm-dd format
+  endDate: string; // End date in yyyy-mm-dd format
+  timeUnit: "date" | "week" | "month"; // Time unit for analysis
+  category: string; // Category code
+  device: "pc" | "mo"; // Device type (pc or mobile)
 }
 
 // DataLab Shopping Gender Types
 export interface DatalabShoppingGenderRequest {
-  startDate: string;
-  endDate: string;
-  timeUnit: "date" | "week" | "month";
-  category: string;
-  gender: "f" | "m";
+  startDate: string; // Start date in yyyy-mm-dd format
+  endDate: string; // End date in yyyy-mm-dd format
+  timeUnit: "date" | "week" | "month"; // Time unit for analysis
+  category: string; // Category code
+  gender: "f" | "m"; // Gender (female or male)
 }
 
 // DataLab Shopping Age Types
 export interface DatalabShoppingAgeRequest {
-  startDate: string;
-  endDate: string;
-  timeUnit: "date" | "week" | "month";
-  category: string;
-  ages: string[];
+  startDate: string; // Start date in yyyy-mm-dd format
+  endDate: string; // End date in yyyy-mm-dd format
+  timeUnit: "date" | "week" | "month"; // Time unit for analysis
+  category: string; // Category code
+  ages: string[]; // Age groups
 }
 
 // DataLab Shopping Keywords Types
 export interface DatalabShoppingKeywordsRequest {
-  startDate: string;
-  endDate: string;
-  timeUnit: "date" | "week" | "month";
-  category: string;
+  startDate: string; // Start date in yyyy-mm-dd format
+  endDate: string; // End date in yyyy-mm-dd format
+  timeUnit: "date" | "week" | "month"; // Time unit for analysis
+  category: string; // Category code
   keyword: Array<{
-    name: string;
-    param: string[];
+    name: string; // Keyword name
+    param: string[]; // Keyword parameters
   }>;
 }
 
 // DataLab Shopping Keyword Types
 export interface DatalabShoppingKeywordRequest {
-  startDate: string;
-  endDate: string;
-  timeUnit: "date" | "week" | "month";
-  category: string;
-  keyword: string;
-  device?: "pc" | "mo";
-  gender?: "f" | "m";
-  ages?: string[];
+  startDate: string; // Start date in yyyy-mm-dd format
+  endDate: string; // End date in yyyy-mm-dd format
+  timeUnit: "date" | "week" | "month"; // Time unit for analysis
+  category: string; // Category code
+  keyword: string; // Search keyword
+  device?: "pc" | "mo"; // Device type (pc or mobile)
+  gender?: "f" | "m"; // Gender (female or male)
+  ages?: string[]; // Age groups
 }

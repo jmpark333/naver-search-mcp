@@ -8,24 +8,25 @@ An MCP server that enables searching various content using the Naver Search API 
 
 ### Search Features
 
-- News Search
-- Blog Search
-- Shopping Search
-- Image Search
-- Knowledge-iN Search
-- Book Search
-- Encyclopedia Search
-- Web Document Search
-- Academic Article Search
-- Cafe Post Search
+- Unified Search (search)
+- News Search (search_news)
+- Blog Search (search_blog)
+- Shopping Search (search_shop)
+- Image Search (search_image)
+- Knowledge-iN Search (search_kin)
+- Book Search (search_book)
+- Encyclopedia Search (search_encyc)
+- Web Document Search (search_doc)
+- Cafe Article Search (search_cafearticle)
 
 ### Datalab Features
 
-- Search Term Trend Analysis
-- Shopping Category Trends
-- Device-specific Shopping Trends (PC/Mobile)
-- Shopping Trends by Gender/Age Groups
-- Shopping Keyword Trends
+- Search Term Trend Analysis (datalab_search)
+- Shopping Category Trends (datalab_shopping_category)
+- Device-specific Shopping Trends - PC/Mobile (datalab_shopping_by_device)
+- Shopping Trends by Gender (datalab_shopping_by_gender)
+- Shopping Trends by Age Groups (datalab_shopping_by_age)
+- Shopping Keyword Trends (datalab_shopping_keywords)
 
 ## Installation and Execution
 
@@ -105,12 +106,21 @@ Or if using Docker:
   - A unified search tool that can perform searches for all content types
   - Parameters:
     - `type`: Search type (news, blog, shop, etc.)
-    - `query`: Search term
+    - `query`: Search term (required)
     - `display`: Number of results to display (default: 10)
     - `start`: Starting position for search results (default: 1)
     - `sort`: Sort method (sim: by similarity, date: by date)
 
 ### Individual Search Tools
+
+Each search tool accepts the following parameters:
+
+- `query`: Search term (required)
+- `display`: Number of results to display (default: 10)
+- `start`: Starting position for search results (default: 1)
+- `sort`: Sort method (sim: by similarity, date: by date)
+
+Available search tools:
 
 - **search_news**: News search
 - **search_blog**: Blog search
@@ -120,38 +130,68 @@ Or if using Docker:
 - **search_book**: Book search
 - **search_encyc**: Encyclopedia search
 - **search_doc**: Web document search
-- **search_academic**: Academic article search
-- **search_cafe**: Cafe post search
-
-Each search tool accepts the following parameters:
-
-- `query`: Search term
-- `display`: Number of results to display (default: 10)
-- `start`: Starting position for search results (default: 1)
-- `sort`: Sort method (sim: by similarity, date: by date)
+- **search_cafearticle**: Cafe article search
 
 ### Datalab Tools
 
-- **datalab_search_trend**
+- **datalab_search**
 
   - Analyze search term trends
   - Parameters:
     - `startDate`: Analysis start date (YYYY-MM-DD)
     - `endDate`: Analysis end date (YYYY-MM-DD)
     - `timeUnit`: Time unit for analysis (date, week, month)
-    - `keywords`: List of keywords to analyze
-    - `category`: Category to analyze within
+    - `keywordGroups`: Array of keyword groups to analyze
+      - `groupName`: Name of the keyword group
+      - `keywords`: Array of keywords in the group
 
-- **datalab_shopping_trend**
-  - Analyze shopping trends
+- **datalab_shopping_category**
+
+  - Analyze shopping category trends
   - Parameters:
     - `startDate`: Analysis start date (YYYY-MM-DD)
     - `endDate`: Analysis end date (YYYY-MM-DD)
     - `timeUnit`: Time unit for analysis (date, week, month)
-    - `category`: Shopping category
-    - `device`: Device type (pc, mobile, all)
-    - `gender`: Gender filter (m, f, a)
-    - `ages`: Age groups to analyze
+    - `category`: Shopping category code
+
+- **datalab_shopping_by_device**
+
+  - Analyze shopping trends by device type
+  - Parameters:
+    - `startDate`: Analysis start date (YYYY-MM-DD)
+    - `endDate`: Analysis end date (YYYY-MM-DD)
+    - `timeUnit`: Time unit for analysis (date, week, month)
+    - `category`: Shopping category code
+    - `device`: Device type (pc, mo)
+
+- **datalab_shopping_by_gender**
+
+  - Analyze shopping trends by gender
+  - Parameters:
+    - `startDate`: Analysis start date (YYYY-MM-DD)
+    - `endDate`: Analysis end date (YYYY-MM-DD)
+    - `timeUnit`: Time unit for analysis (date, week, month)
+    - `category`: Shopping category code
+    - `gender`: Gender (f, m)
+
+- **datalab_shopping_by_age**
+
+  - Analyze shopping trends by age groups
+  - Parameters:
+    - `startDate`: Analysis start date (YYYY-MM-DD)
+    - `endDate`: Analysis end date (YYYY-MM-DD)
+    - `timeUnit`: Time unit for analysis (date, week, month)
+    - `category`: Shopping category code
+    - `ages`: Array of age groups (e.g. ["10", "20", "30"])
+
+- **datalab_shopping_keywords**
+  - Analyze shopping keyword trends
+  - Parameters:
+    - `startDate`: Analysis start date (YYYY-MM-DD)
+    - `endDate`: Analysis end date (YYYY-MM-DD)
+    - `timeUnit`: Time unit for analysis (date, week, month)
+    - `category`: Shopping category code
+    - `keyword`: Search keyword
 
 ## Build
 
