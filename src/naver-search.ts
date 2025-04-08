@@ -16,7 +16,9 @@ import {
  */
 export class NaverSearchClient {
   private static instance: NaverSearchClient | null = null;
-  private readonly baseUrl = "https://openapi.naver.com/v1/search";
+  private readonly searchBaseUrl = "https://openapi.naver.com/v1/search";
+  private readonly datalabBaseUrl = "https://openapi.naver.com/v1/datalab";
+  private readonly visionBaseUrl = "https://openapi.naver.com/v1/vision";
   private config: NaverSearchConfig | null = null;
 
   private constructor() {}
@@ -62,7 +64,7 @@ export class NaverSearchClient {
     params: NaverSearchParams
   ): Promise<NaverSearchResponse> {
     try {
-      const response = await axios.get(`${this.baseUrl}/${type}`, {
+      const response = await axios.get(`${this.searchBaseUrl}/${type}`, {
         headers: this.getHeaders(),
         params: {
           ...params,
@@ -110,57 +112,81 @@ export class NaverSearchClient {
 
   // DataLab Search API methods
   async searchTrend(params: DatalabSearchRequest): Promise<any> {
-    return this.post("/v1/datalab/search", params);
+    return this.post("datalab", "/search", params);
   }
 
   // DataLab Shopping API methods
   async shoppingCategoryTrend(params: DatalabShoppingRequest): Promise<any> {
-    return this.post("/v1/datalab/shopping/categories", params);
+    return this.post("datalab", "/shopping/categories", params);
   }
 
   async shoppingCategoryByDevice(params: DatalabShoppingRequest): Promise<any> {
-    return this.post("/v1/datalab/shopping/category/device", params);
+    return this.post("datalab", "/shopping/category/device", params);
   }
 
   async shoppingCategoryByGender(params: DatalabShoppingRequest): Promise<any> {
-    return this.post("/v1/datalab/shopping/category/gender", params);
+    return this.post("datalab", "/shopping/category/gender", params);
   }
 
   async shoppingCategoryByAge(params: DatalabShoppingRequest): Promise<any> {
-    return this.post("/v1/datalab/shopping/category/age", params);
+    return this.post("datalab", "/shopping/category/age", params);
   }
 
   async shoppingCategoryKeywords(params: DatalabShoppingRequest): Promise<any> {
-    return this.post("/v1/datalab/shopping/category/keywords", params);
+    return this.post("datalab", "/shopping/category/keywords", params);
   }
 
   async shoppingKeywordByDevice(params: DatalabShoppingRequest): Promise<any> {
-    return this.post("/v1/datalab/shopping/category/keyword/device", params);
+    return this.post("datalab", "/shopping/category/keyword/device", params);
   }
 
   async shoppingKeywordByGender(params: DatalabShoppingRequest): Promise<any> {
-    return this.post("/v1/datalab/shopping/category/keyword/gender", params);
+    return this.post("datalab", "/shopping/category/keyword/gender", params);
   }
 
   async shoppingKeywordByAge(params: DatalabShoppingRequest): Promise<any> {
-    return this.post("/v1/datalab/shopping/category/keyword/age", params);
+    return this.post("datalab", "/shopping/category/keyword/age", params);
   }
 
   // Vision API methods
   async detectCelebrity(
     params: VisionCelebrityRequest
   ): Promise<VisionCelebrityResponse> {
-    return this.post("/v1/vision/celebrity", params);
+    return this.post("vision", "/celebrity", params);
   }
 
   /**
    * Generic POST request handler
+   * @param apiType - Type of API to use (search, datalab, vision)
+   * @param endpoint - API endpoint
+   * @param data - Request data
    */
-  private async post(endpoint: string, data: any): Promise<any> {
-    const response = await axios.post(`${this.baseUrl}${endpoint}`, data, {
-      headers: this.getHeaders(),
-    });
-    return response.data;
+  private async post(
+    apiType: "search" | "datalab" | "vision",
+    endpoint: string,
+    data: any
+  ): Promise<any> {
+    const baseUrl = {
+      search: this.searchBaseUrl,
+      datalab: this.datalabBaseUrl,
+      vision: this.visionBaseUrl,
+    }[apiType];
+
+    try {
+      const response = await axios.post(`${baseUrl}${endpoint}`, data, {
+        headers: this.getHeaders(),
+      });
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(
+          `Naver API Error: ${
+            error.response?.data?.errorMessage || error.message
+          }`
+        );
+      }
+      throw error;
+    }
   }
 }
 
