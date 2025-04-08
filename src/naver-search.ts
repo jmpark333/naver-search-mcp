@@ -126,14 +126,7 @@ export class NaverSearchClient {
   async searchAcademic(
     params: NaverDocumentSearchParams
   ): Promise<NaverDocumentSearchResponse> {
-    const response = await axios.get<NaverDocumentSearchResponse>(
-      `${this.searchBaseUrl}/doc.json`,
-      {
-        params: { ...params },
-        ...this.getHeaders(),
-      }
-    );
-    return response.data;
+    return this.search<NaverDocumentSearchResponse>({ type: "doc", ...params });
   }
 
   async searchEncyc(
