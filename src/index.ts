@@ -438,8 +438,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       case "search_kin":
       case "search_book":
       case "search_doc":
-      case "search_encyc":
-      case "search_academic": {
+      case "search_encyc": {
         const params = SearchArgsSchema.parse(args);
         const type = name.replace("search_", "") as NaverSearchType;
         result = await client.search({ type, ...params });
@@ -570,16 +569,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         break;
       }
 
-      case "search_doc": {
-        const params = NaverDocumentSearchParamsSchema.parse(args);
-        result = await client.searchDoc(params);
-        break;
-      }
-
-      case "search_encyc": {
+      case "search_academic": {
         const params = SearchArgsSchema.parse(args);
-        const type = name.replace("search_", "") as NaverSearchType;
-        result = await client.search({ type, ...params });
+        result = await client.searchAcademic(params);
         break;
       }
 
