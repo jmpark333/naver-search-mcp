@@ -20,7 +20,7 @@ import {
 } from "./types/naver-search.types.js";
 import { NaverSearchClient } from "./naver-search.js";
 
-// API 키 확인
+// Validate required API keys
 const NAVER_CLIENT_ID = process.env.NAVER_CLIENT_ID!;
 const NAVER_CLIENT_SECRET = process.env.NAVER_CLIENT_SECRET!;
 
@@ -31,13 +31,14 @@ if (!NAVER_CLIENT_ID || !NAVER_CLIENT_SECRET) {
   process.exit(1);
 }
 
-// 네이버 검색 클라이언트 초기화
+// Initialize Naver Search client singleton
 const client = NaverSearchClient.getInstance();
 client.initialize({
   clientId: NAVER_CLIENT_ID,
   clientSecret: NAVER_CLIENT_SECRET,
 });
 
+// Create MCP server instance
 const server = new Server(
   {
     name: "naver-search-server",
@@ -50,7 +51,7 @@ const server = new Server(
   }
 );
 
-// 검색 도구 스키마 정의
+// Define base search arguments schema
 const SearchArgsSchema = z.object({
   type: NaverSearchTypeSchema,
   query: z.string(),
@@ -62,7 +63,7 @@ const SearchArgsSchema = z.object({
 const ToolInputSchema = ToolSchema.shape.inputSchema;
 type ToolInput = z.infer<typeof ToolInputSchema>;
 
-// 도구 목록 핸들러
+// Register available tools handler
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
     tools: [
@@ -165,12 +166,13 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
   };
 });
 
-// 도구 호출 핸들러
+// Handle tool execution requests
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   try {
     const { name, arguments: args } = request.params;
 
     switch (name) {
+      // Unified search handler
       case "search": {
         const parsed = SearchArgsSchema.safeParse(args);
         if (!parsed.success) {
@@ -187,6 +189,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
       }
 
+      // Individual search type handlers
       case "search_news":
       case "search_blog":
       case "search_shop":
@@ -211,6 +214,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
       }
 
+      // DataLab handlers
       case "datalab_search": {
         const parsed = datalab_search.schema.safeParse(args);
         if (!parsed.success) {
@@ -224,71 +228,31 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
       }
 
-      case "datalab_shopping_category": {
-        const parsed = datalab_shopping_category.schema.safeParse(args);
-        if (!parsed.success) {
-          throw new Error(
-            `Invalid arguments for datalab_shopping_category: ${parsed.error}`
-          );
-        }
-        const result = await datalab_shopping_category.handler(parsed.data);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
-        };
-      }
-
-      case "datalab_shopping_by_device": {
-        const parsed = datalab_shopping_by_device.schema.safeParse(args);
-        if (!parsed.success) {
-          throw new Error(
-            `Invalid arguments for datalab_shopping_by_device: ${parsed.error}`
-          );
-        }
-        const result = await datalab_shopping_by_device.handler(parsed.data);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
-        };
-      }
-
-      case "datalab_shopping_by_gender": {
-        const parsed = datalab_shopping_by_gender.schema.safeParse(args);
-        if (!parsed.success) {
-          throw new Error(
-            `Invalid arguments for datalab_shopping_by_gender: ${parsed.error}`
-          );
-        }
-        const result = await datalab_shopping_by_gender.handler(parsed.data);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
-        };
-      }
-
-      case "datalab_shopping_by_age": {
-        const parsed = datalab_shopping_by_age.schema.safeParse(args);
-        if (!parsed.success) {
-          throw new Error(
-            `Invalid arguments for datalab_shopping_by_age: ${parsed.error}`
-          );
-        }
-        const result = await datalab_shopping_by_age.handler(parsed.data);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
-        };
-      }
-
+      // Shopping trend analysis handlers
+      case "datalab_shopping_category":
+      case "datalab_shopping_by_device":
+      case "datalab_shopping_by_gender":
+      case "datalab_shopping_by_age":
       case "datalab_shopping_keywords": {
-        const parsed = datalab_shopping_keywords.schema.safeParse(args);
+        const handler = {
+          datalab_shopping_category,
+          datalab_shopping_by_device,
+          datalab_shopping_by_gender,
+          datalab_shopping_by_age,
+          datalab_shopping_keywords,
+        }[name];
+
+        const parsed = handler.schema.safeParse(args);
         if (!parsed.success) {
-          throw new Error(
-            `Invalid arguments for datalab_shopping_keywords: ${parsed.error}`
-          );
+          throw new Error(`Invalid arguments for ${name}: ${parsed.error}`);
         }
-        const result = await datalab_shopping_keywords.handler(parsed.data);
+        const result = await handler.handler(parsed.data);
         return {
           content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
         };
       }
 
+      // Vision API handler
       case "vision_celebrity": {
         const parsed = vision_celebrity.schema.safeParse(args);
         if (!parsed.success) {
@@ -314,7 +278,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   }
 });
 
-// DataLab Search
+// DataLab Search API schema and handler
 const datalab_search = {
   schema: z.object({
     startDate: z.string().describe("Start date (yyyy-mm-dd)"),
@@ -334,7 +298,7 @@ const datalab_search = {
   },
 };
 
-// DataLab Shopping
+// DataLab Shopping API schemas and handlers
 const datalab_shopping_category = {
   schema: z.object({
     startDate: z.string().describe("Start date (yyyy-mm-dd)"),
@@ -401,7 +365,7 @@ const datalab_shopping_keywords = {
   },
 };
 
-// Vision API
+// Vision API schema and handler
 const vision_celebrity = {
   schema: z.object({
     image: z.string().describe("Base64 encoded image data"),
@@ -411,24 +375,7 @@ const vision_celebrity = {
   },
 };
 
-const tools = {
-  // ... existing tools ...
-
-  // DataLab Search
-  datalab_search,
-
-  // DataLab Shopping
-  datalab_shopping_category,
-  datalab_shopping_by_device,
-  datalab_shopping_by_gender,
-  datalab_shopping_by_age,
-  datalab_shopping_keywords,
-
-  // Vision API
-  vision_celebrity,
-};
-
-// 서버 시작
+// Initialize and start server
 async function runServer() {
   const transport = new StdioServerTransport();
   await server.connect(transport);

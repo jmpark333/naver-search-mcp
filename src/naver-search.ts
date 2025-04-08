@@ -10,6 +10,10 @@ import {
   VisionCelebrityResponse,
 } from "./types/naver-search.types.js";
 
+/**
+ * NaverSearchClient - A singleton client for interacting with Naver's APIs
+ * Handles search, DataLab, and Vision API requests
+ */
 export class NaverSearchClient {
   private static instance: NaverSearchClient | null = null;
   private readonly baseUrl = "https://openapi.naver.com/v1/search";
@@ -17,6 +21,9 @@ export class NaverSearchClient {
 
   private constructor() {}
 
+  /**
+   * Get singleton instance of NaverSearchClient
+   */
   static getInstance(): NaverSearchClient {
     if (!NaverSearchClient.instance) {
       NaverSearchClient.instance = new NaverSearchClient();
@@ -24,14 +31,21 @@ export class NaverSearchClient {
     return NaverSearchClient.instance;
   }
 
+  /**
+   * Initialize client with API credentials
+   */
   initialize(config: NaverSearchConfig) {
     this.config = config;
   }
 
+  /**
+   * Get headers required for API requests
+   * @throws Error if client is not initialized
+   */
   private getHeaders() {
     if (!this.config) {
       throw new Error(
-        "NaverSearchClient가 초기화되지 않았습니다. initialize()를 먼저 호출해주세요."
+        "NaverSearchClient is not initialized. Please call initialize() first."
       );
     }
     return {
@@ -40,6 +54,9 @@ export class NaverSearchClient {
     };
   }
 
+  /**
+   * Generic search method that supports all search types
+   */
   async search(
     type: NaverSearchType,
     params: NaverSearchParams
@@ -66,7 +83,7 @@ export class NaverSearchClient {
     }
   }
 
-  // 편의 메서드들
+  // Convenience methods for specific search types
   async searchNews(params: NaverSearchParams) {
     return this.search("news", params);
   }
@@ -91,12 +108,12 @@ export class NaverSearchClient {
     return this.search("book", params);
   }
 
-  // DataLab Search API
+  // DataLab Search API methods
   async searchTrend(params: DatalabSearchRequest): Promise<any> {
     return this.post("/v1/datalab/search", params);
   }
 
-  // DataLab Shopping APIs
+  // DataLab Shopping API methods
   async shoppingCategoryTrend(params: DatalabShoppingRequest): Promise<any> {
     return this.post("/v1/datalab/shopping/categories", params);
   }
@@ -129,13 +146,16 @@ export class NaverSearchClient {
     return this.post("/v1/datalab/shopping/category/keyword/age", params);
   }
 
-  // Vision API
+  // Vision API methods
   async detectCelebrity(
     params: VisionCelebrityRequest
   ): Promise<VisionCelebrityResponse> {
     return this.post("/v1/vision/celebrity", params);
   }
 
+  /**
+   * Generic POST request handler
+   */
   private async post(endpoint: string, data: any): Promise<any> {
     const response = await axios.post(`${this.baseUrl}${endpoint}`, data, {
       headers: this.getHeaders(),
@@ -144,6 +164,10 @@ export class NaverSearchClient {
   }
 }
 
+/**
+ * NaverSearchMCP - High-level wrapper for NaverSearchClient
+ * Provides simplified interface with error handling
+ */
 export class NaverSearchMCP {
   private client: NaverSearchClient;
 
@@ -151,6 +175,9 @@ export class NaverSearchMCP {
     this.client = NaverSearchClient.getInstance();
   }
 
+  /**
+   * Generic search method with error handling
+   */
   async search(
     type: NaverSearchType,
     query: string,
@@ -169,14 +196,12 @@ export class NaverSearchMCP {
       return {
         success: false,
         error:
-          error instanceof Error
-            ? error.message
-            : "알 수 없는 오류가 발생했습니다.",
+          error instanceof Error ? error.message : "Unknown error occurred",
       };
     }
   }
 
-  // 편의 메서드들
+  // Convenience methods with error handling
   async searchNews(query: string, options: Partial<NaverSearchParams> = {}) {
     return this.search("news", query, options);
   }
