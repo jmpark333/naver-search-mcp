@@ -1,9 +1,45 @@
-name: "@modelcontextprotocol/server-naver-search"
-version: "1.0.0"
-description: "MCP server for Naver Search API"
-author: "Naver Search MCP Team"
-license: "MIT"
-repository: "https://github.com/your-username/mcp-naver-search"
+name: naver-search
+version: 1.0.0
+description: |
+  [KOR]
+  네이버 검색 API를 활용한 MCP 서버입니다. 뉴스, 블로그, 쇼핑, 이미지 등 다양한 컨텐츠를 검색하고 데이터랩 분석과 비전 API를 활용할 수 있습니다.
+
+  주요 기능:
+  - 통합 검색: 모든 타입의 컨텐츠를 한 번에 검색
+  - 카테고리별 검색: 뉴스, 블로그, 쇼핑, 이미지, 지식iN, 책 등 개별 검색
+  - 검색 결과 정렬: 유사도순 또는 날짜순 정렬 지원
+  - 페이지네이션: 검색 결과 페이징 처리 지원
+  - 데이터랩 분석:
+    * 검색어 트렌드 분석
+    * 쇼핑 카테고리별 트렌드
+    * 디바이스별 쇼핑 트렌드 (PC/모바일)
+    * 성별/연령대별 쇼핑 트렌드
+    * 쇼핑 키워드 트렌드
+  - 비전 API:
+    * 유명인 얼굴 인식
+    * 유사도 점수 분석
+
+  [ENG]
+  An MCP server utilizing the Naver Search API. Search various types of content including news, blogs, shopping items, and images, analyze data using Datalab, and utilize Vision API capabilities.
+
+  Key Features:
+  - Unified Search: Search all content types at once
+  - Category-specific Search: Individual search for news, blogs, shopping, images, Knowledge-iN, books, etc.
+  - Search Result Sorting: Support for sorting by relevance or date
+  - Pagination: Support for paginated search results
+  - Datalab Analysis:
+    * Search term trend analysis
+    * Shopping category trends
+    * Device-specific shopping trends (PC/Mobile)
+    * Shopping trends by gender/age groups
+    * Shopping keyword trends
+  - Vision API:
+    * Celebrity face detection
+    * Similarity score analysis
+
+author: isnow890
+repository: https://github.com/isnow890/naver-search-mcp
+license: MIT
 
 # Smithery.ai configuration
 startCommand:
@@ -38,19 +74,33 @@ runtime:
   transport: "stdio"
 
 environment:
-  - name: "NAVER_CLIENT_ID"
-    description: "Naver API Client ID"
+  - name: NAVER_CLIENT_ID
+    description: |
+      [KOR]
+      네이버 개발자 센터에서 발급받은 클라이언트 ID
+
+      [ENG]
+      Client ID issued from Naver Developers Center
     required: true
-    type: "string"
-  - name: "NAVER_CLIENT_SECRET"
-    description: "Naver API Client Secret"
+
+  - name: NAVER_CLIENT_SECRET
+    description: |
+      [KOR]
+      네이버 개발자 센터에서 발급받은 클라이언트 시크릿
+
+      [ENG]
+      Client Secret issued from Naver Developers Center
     required: true
-    type: "string"
 
 capabilities:
   tools:
-    - name: "search"
-      description: "Search across all Naver services using the unified search API"
+    - name: search
+      description: |
+        [KOR]
+        모든 타입의 컨텐츠를 검색할 수 있는 통합 검색 기능입니다.
+
+        [ENG]
+        A unified search function that can search for all types of content.
       schema:
         type: "object"
         required: ["query"]
@@ -72,8 +122,13 @@ capabilities:
             enum: ["sim", "date"]
             description: "Sort order (sim: similarity, date: date)"
 
-    - name: "search_news"
-      description: "Search for news articles from Naver News"
+    - name: search_news
+      description: |
+        [KOR]
+        네이버 뉴스 검색 기능입니다. 최신 뉴스 기사를 검색할 수 있습니다.
+
+        [ENG]
+        Naver News search function. Search for the latest news articles.
       schema:
         type: "object"
         required: ["query"]
@@ -81,9 +136,24 @@ capabilities:
           query:
             type: "string"
             description: "Search query"
+          display:
+            type: "number"
+            description: "Number of results to return"
+          start:
+            type: "number"
+            description: "Start index for pagination"
+          sort:
+            type: "string"
+            enum: ["sim", "date"]
+            description: "Sort order (sim: similarity, date: date)"
 
-    - name: "search_blog"
-      description: "Search for blog posts from Naver Blog"
+    - name: search_blog
+      description: |
+        [KOR]
+        네이버 블로그 검색 기능입니다. 블로그 포스트를 검색할 수 있습니다.
+
+        [ENG]
+        Naver Blog search function. Search for blog posts.
       schema:
         type: "object"
         required: ["query"]
@@ -91,9 +161,24 @@ capabilities:
           query:
             type: "string"
             description: "Search query"
+          display:
+            type: "number"
+            description: "Number of results to return"
+          start:
+            type: "number"
+            description: "Start index for pagination"
+          sort:
+            type: "string"
+            enum: ["sim", "date"]
+            description: "Sort order (sim: similarity, date: date)"
 
-    - name: "search_shop"
-      description: "Search for products from Naver Shopping"
+    - name: search_shop
+      description: |
+        [KOR]
+        네이버 쇼핑 검색 기능입니다. 상품 정보를 검색할 수 있습니다.
+
+        [ENG]
+        Naver Shopping search function. Search for product information.
       schema:
         type: "object"
         required: ["query"]
@@ -101,9 +186,24 @@ capabilities:
           query:
             type: "string"
             description: "Search query"
+          display:
+            type: "number"
+            description: "Number of results to return"
+          start:
+            type: "number"
+            description: "Start index for pagination"
+          sort:
+            type: "string"
+            enum: ["sim", "date"]
+            description: "Sort order (sim: similarity, date: date)"
 
-    - name: "search_image"
-      description: "Search for images across Naver services"
+    - name: search_image
+      description: |
+        [KOR]
+        네이버 이미지 검색 기능입니다. 다양한 이미지를 검색할 수 있습니다.
+
+        [ENG]
+        Naver Image search function. Search for various images.
       schema:
         type: "object"
         required: ["query"]
@@ -111,9 +211,24 @@ capabilities:
           query:
             type: "string"
             description: "Search query"
+          display:
+            type: "number"
+            description: "Number of results to return"
+          start:
+            type: "number"
+            description: "Start index for pagination"
+          sort:
+            type: "string"
+            enum: ["sim", "date"]
+            description: "Sort order (sim: similarity, date: date)"
 
-    - name: "search_kin"
-      description: "Search for Q&A posts from Naver Knowledge-iN"
+    - name: search_kin
+      description: |
+        [KOR]
+        네이버 지식iN 검색 기능입니다. 질문과 답변을 검색할 수 있습니다.
+
+        [ENG]
+        Naver Knowledge-iN search function. Search for questions and answers.
       schema:
         type: "object"
         required: ["query"]
@@ -121,9 +236,24 @@ capabilities:
           query:
             type: "string"
             description: "Search query"
+          display:
+            type: "number"
+            description: "Number of results to return"
+          start:
+            type: "number"
+            description: "Start index for pagination"
+          sort:
+            type: "string"
+            enum: ["sim", "date"]
+            description: "Sort order (sim: similarity, date: date)"
 
-    - name: "search_book"
-      description: "Search for books in Naver Books"
+    - name: search_book
+      description: |
+        [KOR]
+        네이버 책 검색 기능입니다. 도서 정보를 검색할 수 있습니다.
+
+        [ENG]
+        Naver Book search function. Search for book information.
       schema:
         type: "object"
         required: ["query"]
@@ -131,8 +261,18 @@ capabilities:
           query:
             type: "string"
             description: "Search query"
+          display:
+            type: "number"
+            description: "Number of results to return"
+          start:
+            type: "number"
+            description: "Start index for pagination"
+          sort:
+            type: "string"
+            enum: ["sim", "date"]
+            description: "Sort order (sim: similarity, date: date)"
 
-    - name: "datalab_search"
+    - name: datalab_search
       description: "Analyze search trends across Naver services"
       schema:
         type: "object"
@@ -162,7 +302,7 @@ capabilities:
                     type: "string"
                   description: "List of keywords"
 
-    - name: "vision_celebrity"
+    - name: vision_celebrity
       description: "Detect and analyze celebrity faces in images with similarity scores"
       schema:
         type: "object"
@@ -172,7 +312,7 @@ capabilities:
             type: "string"
             description: "Base64 encoded image data"
 
-    - name: "datalab_shopping_category"
+    - name: datalab_shopping_category
       description: "Analyze shopping trends by category in Naver Shopping"
       schema:
         type: "object"
@@ -192,7 +332,7 @@ capabilities:
             type: "string"
             description: "Shopping category code"
 
-    - name: "datalab_shopping_by_device"
+    - name: datalab_shopping_by_device
       description: "Analyze shopping trends by device type (PC/Mobile) in Naver Shopping"
       schema:
         type: "object"
@@ -216,7 +356,7 @@ capabilities:
             enum: ["pc", "mo"]
             description: "Device type (pc or mo)"
 
-    - name: "datalab_shopping_by_gender"
+    - name: datalab_shopping_by_gender
       description: "Analyze shopping trends by gender in Naver Shopping"
       schema:
         type: "object"
@@ -240,7 +380,7 @@ capabilities:
             enum: ["f", "m"]
             description: "Gender (f or m)"
 
-    - name: "datalab_shopping_by_age"
+    - name: datalab_shopping_by_age
       description: "Analyze shopping trends by age groups in Naver Shopping"
       schema:
         type: "object"
@@ -265,7 +405,7 @@ capabilities:
               type: "string"
             description: 'Age groups (e.g. ["10","20","30"])'
 
-    - name: "datalab_shopping_keywords"
+    - name: datalab_shopping_keywords
       description: "Analyze shopping trends by keywords in Naver Shopping"
       schema:
         type: "object"
