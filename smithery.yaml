@@ -2,7 +2,7 @@ name: naver-search
 version: 1.0.0
 description: |
   [KOR]
-  네이버 검색 API를 활용한 MCP 서버입니다. 뉴스, 블로그, 쇼핑, 이미지 등 다양한 컨텐츠를 검색하고 데이터랩 분석과 비전 API를 활용할 수 있습니다.
+  네이버 검색 API를 활용한 MCP 서버입니다. 뉴스, 블로그, 쇼핑, 이미지 등 다양한 컨텐츠를 검색하고 데이터랩 분석을 활용할 수 있습니다.
 
   주요 기능:
   - 통합 검색: 모든 타입의 컨텐츠를 한 번에 검색
@@ -15,12 +15,9 @@ description: |
     * 디바이스별 쇼핑 트렌드 (PC/모바일)
     * 성별/연령대별 쇼핑 트렌드
     * 쇼핑 키워드 트렌드
-  - 비전 API:
-    * 유명인 얼굴 인식
-    * 유사도 점수 분석
 
   [ENG]
-  An MCP server utilizing the Naver Search API. Search various types of content including news, blogs, shopping items, and images, analyze data using Datalab, and utilize Vision API capabilities.
+  An MCP server utilizing the Naver Search API. Search various types of content including news, blogs, shopping items, and images, and analyze data using Datalab.
 
   Key Features:
   - Unified Search: Search all content types at once
@@ -33,9 +30,6 @@ description: |
     * Device-specific shopping trends (PC/Mobile)
     * Shopping trends by gender/age groups
     * Shopping keyword trends
-  - Vision API:
-    * Celebrity face detection
-    * Similarity score analysis
 
 author: isnow890
 repository: https://github.com/isnow890/naver-search-mcp
@@ -301,16 +295,6 @@ capabilities:
                   items:
                     type: "string"
                   description: "List of keywords"
-
-    - name: vision_celebrity
-      description: "Detect and analyze celebrity faces in images with similarity scores"
-      schema:
-        type: "object"
-        required: ["image"]
-        properties:
-          image:
-            type: "string"
-            description: "Base64 encoded image data"
 
     - name: datalab_shopping_category
       description: "Analyze shopping trends by category in Naver Shopping"

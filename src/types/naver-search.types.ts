@@ -43,12 +43,8 @@ export interface NaverSearchResponse {
   total: number;
   start: number;
   display: number;
-  items: Array<{
-    title: string;
-    link: string;
-    description: string;
-    [key: string]: any;
-  }>;
+  items: any[];
+  isError?: boolean;
 }
 
 // DataLab Search Types
@@ -98,23 +94,69 @@ export interface DatalabShoppingResponse {
   }[];
 }
 
-// Vision Celebrity Types
-export interface VisionCelebrityRequest {
-  image: string; // Base64 인코딩된 이미지 데이터
+// Vision API Types
+// export interface VisionCelebrityRequest {
+//   image: string;
+// }
+
+// export interface VisionCelebrityResponse {
+//   info: {
+//     size: {
+//       width: number;
+//       height: number;
+//     };
+//     faceCount: number;
+//   };
+//   faces: Array<{
+//     celebrity: {
+//       value: string;
+//       confidence: number;
+//     };
+//   }>;
+// }
+
+export interface NaverWebSearchParams extends NaverSearchParams {
+  type?: "webkr";
 }
 
-export interface VisionCelebrityResponse {
-  info: {
-    size: {
-      width: number;
-      height: number;
-    };
-    faceCount: number;
-  };
-  faces: Array<{
-    celebrity: {
-      value: string;
-      confidence: number;
-    };
+export interface NaverSearchTrendParams {
+  startDate: string;
+  endDate: string;
+  timeUnit: "date" | "week" | "month";
+  keywordGroups: Array<{
+    groupName: string;
+    keywords: string[];
   }>;
+}
+
+export interface NaverShoppingTrendParams {
+  startDate: string;
+  endDate: string;
+  timeUnit: "date" | "week" | "month";
+  category: string | { name: string; param: string[] }[];
+  keyword?: { name: string; param: string[] }[];
+  device?: "pc" | "mo";
+  gender?: "m" | "f";
+  ages?: ("10" | "20" | "30" | "40" | "50" | "60")[];
+}
+
+export interface NaverCelebrityParams {
+  image: string;
+}
+
+// DataLab Shopping Keyword Types
+export interface DatalabShoppingKeywordItem {
+  name: string;
+  param: string[];
+}
+
+export interface DatalabShoppingKeywordRequest {
+  startDate: string;
+  endDate: string;
+  timeUnit: "date" | "week" | "month";
+  category: string;
+  keyword: DatalabShoppingKeywordItem[];
+  device?: string;
+  gender?: string;
+  ages?: string[];
 }

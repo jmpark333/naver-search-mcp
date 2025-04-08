@@ -2,7 +2,7 @@
 
 [![smithery badge](https://smithery.ai/badge/@isnow890/naver-search-mcp)](https://smithery.ai/server/@isnow890/naver-search-mcp)
 
-An MCP server that enables searching various content using the Naver Search API, analyzing data with Datalab, and utilizing Vision API capabilities.
+An MCP server that enables searching various content using the Naver Search API and analyzing data with Datalab.
 
 ## Features
 
@@ -26,11 +26,6 @@ An MCP server that enables searching various content using the Naver Search API,
 - Device-specific Shopping Trends (PC/Mobile)
 - Shopping Trends by Gender/Age Groups
 - Shopping Keyword Trends
-
-### Vision API Features
-
-- Celebrity Face Detection
-- Face Similarity Analysis
 
 ## Installation and Execution
 
@@ -157,21 +152,6 @@ Each search tool accepts the following parameters:
     - `device`: Device type (pc, mobile, all)
     - `gender`: Gender filter (m, f, a)
     - `ages`: Age groups to analyze
-
-### Vision API Tools
-
-- **vision_face**
-
-  - Detect and analyze faces in images
-  - Parameters:
-    - `image`: Image URL or Base64 encoded image
-    - `mode`: Analysis mode (face, celebrity)
-
-- **vision_face_compare**
-  - Compare faces for similarity
-  - Parameters:
-    - `image1`: First image URL or Base64 encoded image
-    - `image2`: Second image URL or Base64 encoded image
 
 ## Build
 
