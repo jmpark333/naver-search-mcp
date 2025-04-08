@@ -69,94 +69,96 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       {
         name: "search",
         description:
-          "네이버 검색 API를 사용하여 뉴스, 블로그, 쇼핑, 이미지 등 다양한 컨텐츠를 검색합니다.",
+          "Search across all Naver services using the unified search API",
         inputSchema: zodToJsonSchema(SearchArgsSchema) as ToolInput,
       },
       {
         name: "search_news",
-        description: "네이버 뉴스 검색 결과를 반환합니다.",
+        description: "Search for news articles from Naver News",
         inputSchema: zodToJsonSchema(
           SearchArgsSchema.omit({ type: true })
         ) as ToolInput,
       },
       {
         name: "search_blog",
-        description: "네이버 블로그 검색 결과를 반환합니다.",
+        description: "Search for blog posts from Naver Blog",
         inputSchema: zodToJsonSchema(
           SearchArgsSchema.omit({ type: true })
         ) as ToolInput,
       },
       {
         name: "search_shop",
-        description: "네이버 쇼핑 검색 결과를 반환합니다.",
+        description: "Search for products from Naver Shopping",
         inputSchema: zodToJsonSchema(
           SearchArgsSchema.omit({ type: true })
         ) as ToolInput,
       },
       {
         name: "search_image",
-        description: "네이버 이미지 검색 결과를 반환합니다.",
+        description: "Search for images across Naver services",
         inputSchema: zodToJsonSchema(
           SearchArgsSchema.omit({ type: true })
         ) as ToolInput,
       },
       {
         name: "search_kin",
-        description: "네이버 지식iN 검색 결과를 반환합니다.",
+        description: "Search for Q&A posts from Naver Knowledge-iN",
         inputSchema: zodToJsonSchema(
           SearchArgsSchema.omit({ type: true })
         ) as ToolInput,
       },
       {
         name: "search_book",
-        description: "네이버 책 검색 결과를 반환합니다.",
+        description: "Search for books in Naver Books",
         inputSchema: zodToJsonSchema(
           SearchArgsSchema.omit({ type: true })
         ) as ToolInput,
       },
       {
         name: "datalab_search",
-        description: "네이버 통합검색의 검색어 트렌드를 분석합니다.",
+        description: "Analyze search trends across Naver services",
         inputSchema: zodToJsonSchema(datalab_search.schema) as ToolInput,
       },
       {
         name: "datalab_shopping_category",
-        description: "네이버 쇼핑의 카테고리별 트렌드를 분석합니다.",
+        description: "Analyze shopping trends by category in Naver Shopping",
         inputSchema: zodToJsonSchema(
           datalab_shopping_category.schema
         ) as ToolInput,
       },
       {
         name: "datalab_shopping_by_device",
-        description: "네이버 쇼핑의 기기별(PC/모바일) 트렌드를 분석합니다.",
+        description:
+          "Analyze shopping trends by device type (PC/Mobile) in Naver Shopping",
         inputSchema: zodToJsonSchema(
           datalab_shopping_by_device.schema
         ) as ToolInput,
       },
       {
         name: "datalab_shopping_by_gender",
-        description: "네이버 쇼핑의 성별 트렌드를 분석합니다.",
+        description: "Analyze shopping trends by gender in Naver Shopping",
         inputSchema: zodToJsonSchema(
           datalab_shopping_by_gender.schema
         ) as ToolInput,
       },
       {
         name: "datalab_shopping_by_age",
-        description: "네이버 쇼핑의 연령대별 트렌드를 분석합니다.",
+        description: "Analyze shopping trends by age groups in Naver Shopping",
         inputSchema: zodToJsonSchema(
           datalab_shopping_by_age.schema
         ) as ToolInput,
       },
       {
         name: "datalab_shopping_keywords",
-        description: "네이버 쇼핑의 키워드별 트렌드를 분석합니다.",
+        description: "Analyze shopping trends by keywords in Naver Shopping",
         inputSchema: zodToJsonSchema(
           datalab_shopping_keywords.schema
         ) as ToolInput,
       },
       {
         name: "vision_celebrity",
-        description: "이미지에서 유명인을 감지하고 닮은 정도를 분석합니다.",
+        description:
+          "Detect and analyze celebrity faces in images with similarity scores",
         inputSchema: zodToJsonSchema(vision_celebrity.schema) as ToolInput,
       },
     ],
@@ -315,13 +317,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 // DataLab Search
 const datalab_search = {
   schema: z.object({
-    startDate: z.string().describe("조회 시작 날짜 (yyyy-mm-dd)"),
-    endDate: z.string().describe("조회 종료 날짜 (yyyy-mm-dd)"),
-    timeUnit: z.enum(["date", "week", "month"]).describe("구간 단위"),
+    startDate: z.string().describe("Start date (yyyy-mm-dd)"),
+    endDate: z.string().describe("End date (yyyy-mm-dd)"),
+    timeUnit: z
+      .enum(["date", "week", "month"])
+      .describe("Time unit for analysis"),
     keywordGroups: z.array(
       z.object({
-        groupName: z.string().describe("그룹명"),
-        keywords: z.array(z.string()).describe("검색어 목록"),
+        groupName: z.string().describe("Group name"),
+        keywords: z.array(z.string()).describe("List of keywords"),
       })
     ),
   }),
@@ -333,10 +337,12 @@ const datalab_search = {
 // DataLab Shopping
 const datalab_shopping_category = {
   schema: z.object({
-    startDate: z.string().describe("조회 시작 날짜 (yyyy-mm-dd)"),
-    endDate: z.string().describe("조회 종료 날짜 (yyyy-mm-dd)"),
-    timeUnit: z.enum(["date", "week", "month"]).describe("구간 단위"),
-    category: z.string().describe("쇼핑 분야 코드"),
+    startDate: z.string().describe("Start date (yyyy-mm-dd)"),
+    endDate: z.string().describe("End date (yyyy-mm-dd)"),
+    timeUnit: z
+      .enum(["date", "week", "month"])
+      .describe("Time unit for analysis"),
+    category: z.string().describe("Shopping category code"),
   }),
   handler: async (params: DatalabShoppingRequest) => {
     return await client.shoppingCategoryTrend(params);
@@ -349,7 +355,7 @@ const datalab_shopping_by_device = {
     endDate: z.string(),
     timeUnit: z.enum(["date", "week", "month"]),
     category: z.string(),
-    device: z.enum(["pc", "mo"]).describe("기기 종류 (pc 또는 mo)"),
+    device: z.enum(["pc", "mo"]).describe("Device type (pc or mo)"),
   }),
   handler: async (params: DatalabShoppingRequest) => {
     return await client.shoppingCategoryByDevice(params);
@@ -362,7 +368,7 @@ const datalab_shopping_by_gender = {
     endDate: z.string(),
     timeUnit: z.enum(["date", "week", "month"]),
     category: z.string(),
-    gender: z.enum(["f", "m"]).describe("성별 (f 또는 m)"),
+    gender: z.enum(["f", "m"]).describe("Gender (f or m)"),
   }),
   handler: async (params: DatalabShoppingRequest) => {
     return await client.shoppingCategoryByGender(params);
@@ -375,7 +381,7 @@ const datalab_shopping_by_age = {
     endDate: z.string(),
     timeUnit: z.enum(["date", "week", "month"]),
     category: z.string(),
-    ages: z.array(z.string()).describe('연령대 목록 (예: ["10","20","30"])'),
+    ages: z.array(z.string()).describe('Age groups (e.g. ["10","20","30"])'),
   }),
   handler: async (params: DatalabShoppingRequest) => {
     return await client.shoppingCategoryByAge(params);
@@ -388,7 +394,7 @@ const datalab_shopping_keywords = {
     endDate: z.string(),
     timeUnit: z.enum(["date", "week", "month"]),
     category: z.string(),
-    keyword: z.string().describe("검색 키워드"),
+    keyword: z.string().describe("Search keyword"),
   }),
   handler: async (params: DatalabShoppingRequest) => {
     return await client.shoppingCategoryKeywords(params);
@@ -398,7 +404,7 @@ const datalab_shopping_keywords = {
 // Vision API
 const vision_celebrity = {
   schema: z.object({
-    image: z.string().describe("Base64로 인코딩된 이미지 데이터"),
+    image: z.string().describe("Base64 encoded image data"),
   }),
   handler: async (params: VisionCelebrityRequest) => {
     return await client.detectCelebrity(params);

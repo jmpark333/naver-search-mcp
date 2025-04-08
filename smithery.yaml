@@ -1,0 +1,45 @@
+name: "@modelcontextprotocol/server-naver-search"
+version: "1.0.0"
+description: "MCP server for Naver Search API"
+
+build:
+  type: "docker"
+  dockerfile: "Dockerfile"
+
+environment:
+  - name: "NAVER_CLIENT_ID"
+    description: "Naver API Client ID"
+    required: true
+  - name: "NAVER_CLIENT_SECRET"
+    description: "Naver API Client Secret"
+    required: true
+
+tools:
+  - name: "search"
+    description: "Search across all Naver services using the unified search API"
+  - name: "search_news"
+    description: "Search for news articles from Naver News"
+  - name: "search_blog"
+    description: "Search for blog posts from Naver Blog"
+  - name: "search_shop"
+    description: "Search for products from Naver Shopping"
+  - name: "search_image"
+    description: "Search for images across Naver services"
+  - name: "search_kin"
+    description: "Search for Q&A posts from Naver Knowledge-iN"
+  - name: "search_book"
+    description: "Search for books in Naver Books"
+  - name: "datalab_search"
+    description: "Analyze search trends across Naver services"
+  - name: "datalab_shopping_category"
+    description: "Analyze shopping trends by category in Naver Shopping"
+  - name: "datalab_shopping_by_device"
+    description: "Analyze shopping trends by device type (PC/Mobile) in Naver Shopping"
+  - name: "datalab_shopping_by_gender"
+    description: "Analyze shopping trends by gender in Naver Shopping"
+  - name: "datalab_shopping_by_age"
+    description: "Analyze shopping trends by age groups in Naver Shopping"
+  - name: "datalab_shopping_keywords"
+    description: "Analyze shopping trends by keywords in Naver Shopping"
+  - name: "vision_celebrity"
+    description: "Detect and analyze celebrity faces in images with similarity scores"
