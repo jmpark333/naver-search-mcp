@@ -8,7 +8,9 @@ import {
   DatalabShoppingRequest,
   VisionCelebrityRequest,
   VisionCelebrityResponse,
+  DatalabShoppingResponse,
 } from "./types/naver-search.types.js";
+import { AxiosRequestConfig, RawAxiosRequestHeaders } from "axios";
 
 /**
  * NaverSearchClient - A singleton client for interacting with Naver's APIs
@@ -44,16 +46,18 @@ export class NaverSearchClient {
    * Get headers required for API requests
    * @throws Error if client is not initialized
    */
-  private getHeaders() {
+  private getHeaders(): AxiosRequestConfig {
     if (!this.config) {
       throw new Error(
         "NaverSearchClient is not initialized. Please call initialize() first."
       );
     }
-    return {
+    const headers: RawAxiosRequestHeaders = {
       "X-Naver-Client-Id": this.config.clientId,
       "X-Naver-Client-Secret": this.config.clientSecret,
+      "Content-Type": "application/json",
     };
+    return { headers };
   }
 
   /**
@@ -65,7 +69,7 @@ export class NaverSearchClient {
   ): Promise<NaverSearchResponse> {
     try {
       const response = await axios.get(`${this.searchBaseUrl}/${type}`, {
-        headers: this.getHeaders(),
+        ...this.getHeaders(),
         params: {
           ...params,
           display: params.display || 10,
@@ -112,40 +116,174 @@ export class NaverSearchClient {
 
   // DataLab Search API methods
   async searchTrend(params: DatalabSearchRequest): Promise<any> {
-    return this.post("datalab", "/search", params);
+    try {
+      const response = await axios.post(
+        `${this.datalabBaseUrl}/search`,
+        params,
+        this.getHeaders()
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(
+          `Naver DataLab API Error: ${
+            error.response?.data?.errorMessage || error.message
+          }`
+        );
+      }
+      throw error;
+    }
   }
 
   // DataLab Shopping API methods
-  async shoppingCategoryTrend(params: DatalabShoppingRequest): Promise<any> {
-    return this.post("datalab", "/shopping/categories", params);
+  async shoppingCategoryTrend(
+    params: DatalabShoppingRequest
+  ): Promise<DatalabShoppingResponse> {
+    try {
+      const response = await axios.post(
+        "https://openapi.naver.com/v1/datalab/shopping/categories",
+        params,
+        {
+          ...this.getHeaders(),
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        `Failed to get shopping category trend: ${error.message}`
+      );
+    }
   }
 
-  async shoppingCategoryByDevice(params: DatalabShoppingRequest): Promise<any> {
-    return this.post("datalab", "/shopping/category/device", params);
+  async shoppingCategoryByDevice(
+    params: DatalabShoppingRequest
+  ): Promise<DatalabShoppingResponse> {
+    try {
+      const response = await axios.post(
+        "https://openapi.naver.com/v1/datalab/shopping/category/device",
+        params,
+        {
+          ...this.getHeaders(),
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        `Failed to get shopping category by device: ${error.message}`
+      );
+    }
   }
 
-  async shoppingCategoryByGender(params: DatalabShoppingRequest): Promise<any> {
-    return this.post("datalab", "/shopping/category/gender", params);
+  async shoppingCategoryByGender(
+    params: DatalabShoppingRequest
+  ): Promise<DatalabShoppingResponse> {
+    try {
+      const response = await axios.post(
+        "https://openapi.naver.com/v1/datalab/shopping/category/gender",
+        params,
+        {
+          ...this.getHeaders(),
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        `Failed to get shopping category by gender: ${error.message}`
+      );
+    }
   }
 
-  async shoppingCategoryByAge(params: DatalabShoppingRequest): Promise<any> {
-    return this.post("datalab", "/shopping/category/age", params);
+  async shoppingCategoryByAge(
+    params: DatalabShoppingRequest
+  ): Promise<DatalabShoppingResponse> {
+    try {
+      const response = await axios.post(
+        "https://openapi.naver.com/v1/datalab/shopping/category/age",
+        params,
+        {
+          ...this.getHeaders(),
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        `Failed to get shopping category by age: ${error.message}`
+      );
+    }
   }
 
-  async shoppingCategoryKeywords(params: DatalabShoppingRequest): Promise<any> {
-    return this.post("datalab", "/shopping/category/keywords", params);
+  async shoppingCategoryKeywords(
+    params: DatalabShoppingRequest
+  ): Promise<DatalabShoppingResponse> {
+    try {
+      const response = await axios.post(
+        "https://openapi.naver.com/v1/datalab/shopping/category/keywords",
+        params,
+        {
+          ...this.getHeaders(),
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      throw new Error(`Failed to get shopping keywords: ${error.message}`);
+    }
   }
 
-  async shoppingKeywordByDevice(params: DatalabShoppingRequest): Promise<any> {
-    return this.post("datalab", "/shopping/category/keyword/device", params);
+  async shoppingKeywordByDevice(
+    params: DatalabShoppingRequest
+  ): Promise<DatalabShoppingResponse> {
+    try {
+      const response = await axios.post(
+        "https://openapi.naver.com/v1/datalab/shopping/keyword/device",
+        params,
+        {
+          ...this.getHeaders(),
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        `Failed to get shopping keyword by device: ${error.message}`
+      );
+    }
   }
 
-  async shoppingKeywordByGender(params: DatalabShoppingRequest): Promise<any> {
-    return this.post("datalab", "/shopping/category/keyword/gender", params);
+  async shoppingKeywordByGender(
+    params: DatalabShoppingRequest
+  ): Promise<DatalabShoppingResponse> {
+    try {
+      const response = await axios.post(
+        "https://openapi.naver.com/v1/datalab/shopping/keyword/gender",
+        params,
+        {
+          ...this.getHeaders(),
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        `Failed to get shopping keyword by gender: ${error.message}`
+      );
+    }
   }
 
-  async shoppingKeywordByAge(params: DatalabShoppingRequest): Promise<any> {
-    return this.post("datalab", "/shopping/category/keyword/age", params);
+  async shoppingKeywordByAge(
+    params: DatalabShoppingRequest
+  ): Promise<DatalabShoppingResponse> {
+    try {
+      const response = await axios.post(
+        "https://openapi.naver.com/v1/datalab/shopping/keyword/age",
+        params,
+        {
+          ...this.getHeaders(),
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      throw new Error(
+        `Failed to get shopping keyword by age: ${error.message}`
+      );
+    }
   }
 
   // Vision API methods
@@ -174,7 +312,7 @@ export class NaverSearchClient {
 
     try {
       const response = await axios.post(`${baseUrl}${endpoint}`, data, {
-        headers: this.getHeaders(),
+        ...this.getHeaders(),
       });
       return response.data;
     } catch (error) {

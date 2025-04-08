@@ -67,11 +67,35 @@ export interface DatalabShoppingRequest {
   startDate: string;
   endDate: string;
   timeUnit: "date" | "week" | "month";
-  category: string; // 쇼핑 분야 코드
-  keyword?: string; // 검색어 (키워드 관련 API에서 사용)
-  device?: "pc" | "mo"; // 기기별 조회시 사용
-  gender?: "f" | "m"; // 성별 조회시 사용
-  ages?: string[]; // 연령별 조회시 사용 (예: ["10","20","30"])
+  category:
+    | string
+    | {
+        name: string;
+        param: string[];
+      }[];
+  keyword?: {
+    name: string;
+    param: string[];
+  }[];
+  device?: "pc" | "mo";
+  gender?: "m" | "f";
+  ages?: ("10" | "20" | "30" | "40" | "50" | "60")[];
+}
+
+export interface DatalabShoppingResponse {
+  startDate: string;
+  endDate: string;
+  timeUnit: string;
+  results: {
+    title: string;
+    category?: string[];
+    keyword?: string[];
+    data: {
+      period: string;
+      group?: string;
+      ratio: number;
+    }[];
+  }[];
 }
 
 // Vision Celebrity Types
