@@ -1,53 +1,57 @@
-# Naver Search MCP 서버
+# Naver Search MCP Server
 
 [![smithery badge](https://smithery.ai/badge/@isnow890/naver-search-mcp)](https://smithery.ai/server/@isnow890/naver-search-mcp)
 [![MCP.so](https://img.shields.io/badge/MCP.so-Naver%20Search%20MCP-blue)](https://mcp.so/server/naver-search-mcp/isnow890)
 
-네이버 검색 API를 사용하여 다양한 콘텐츠를 검색하고 데이터랩으로 데이터를 분석할 수 있는 MCP 서버입니다.
+MCP server for Naver Search API and DataLab API integration, enabling comprehensive search across various Naver services and data trend analysis.
 
-## API 키 발급 방법
+## Prerequisites
 
-1. [네이버 개발자 센터](https://developers.naver.com/apps/#/register)에 접속합니다.
-2. 애플리케이션 등록을 클릭합니다.
-3. 애플리케이션 이름을 입력하고, 사용 API에서 다음 항목들을 반드시 모두 선택합니다:
-   - 검색 (검색 API - 블로그, 뉴스, 책 등 검색 기능 사용)
-   - 데이터랩(검색어 트렌드) (검색어 트렌드 분석 기능 사용)
-   - 데이터랩(쇼핑인사이트) (쇼핑 분야 트렌드 분석 기능 사용)
-4. 발급받은 Client ID와 Client Secret을 환경 변수로 설정합니다.
+- Naver Developers API Key (Client ID and Secret)
+- Node.js 18 or higher
+- NPM 8 or higher
+- Docker (optional, for container deployment)
 
-이 서버는 검색 API와 데이터랩 API를 모두 활용합니다:
-- 검색 API: 블로그, 뉴스, 쇼핑 등 다양한 네이버 서비스 검색
-- 데이터랩 API: 검색어 트렌드와 쇼핑 인사이트를 통한 데이터 분석
+## Getting API Keys
 
-## 주요 기능
+1. Visit [Naver Developers](https://developers.naver.com/apps/#/register)
+2. Click "Register Application"
+3. Enter application name and select ALL of the following APIs:
+   - Search (for blog, news, book search, etc.)
+   - DataLab (Search Trends)
+   - DataLab (Shopping Insight)
+4. Set the obtained Client ID and Client Secret as environment variables
 
-### 검색 기능
+## Features
 
-- 네이버 뉴스 검색 (search_news)
-- 네이버 블로그 검색 (search_blog)
-- 네이버 쇼핑 검색 (search_shop)
-- 네이버 이미지 검색 (search_image)
-- 네이버 지식iN 검색 (search_kin)
-- 네이버 책 검색 (search_book)
-- 네이버 백과사전 검색 (search_encyc)
-- 네이버 학술자료 검색 (search_academic)
-- 네이버 지역 검색 (search_local)
+### Search Tools
 
-### 데이터랩 기능
+- Naver Web Documents Search (search_webkr)
+- Naver News Search (search_news)
+- Naver Blog Search (search_blog)
+- Naver Shopping Search (search_shop)
+- Naver Image Search (search_image)
+- Naver KnowledgeiN Search (search_kin)
+- Naver Book Search (search_book)
+- Naver Encyclopedia Search (search_encyc)
+- Naver Academic Search (search_academic)
+- Naver Local Search (search_local)
 
-- 네이버 검색어 트렌드 분석 (datalab_search)
-- 네이버 쇼핑 카테고리별 트렌드 분석 (datalab_shopping_category)
-- 네이버 쇼핑 기기별 트렌드 분석 (datalab_shopping_by_device)
-- 네이버 쇼핑 성별 트렌드 분석 (datalab_shopping_by_gender)
-- 네이버 쇼핑 연령별 트렌드 분석 (datalab_shopping_by_age)
-- 네이버 쇼핑 키워드별 트렌드 분석 (datalab_shopping_keywords)
-- 네이버 쇼핑 키워드 기기별 트렌드 분석 (datalab_shopping_keyword_by_device)
-- 네이버 쇼핑 키워드 성별 트렌드 분석 (datalab_shopping_keyword_by_gender)
-- 네이버 쇼핑 키워드 연령별 트렌드 분석 (datalab_shopping_keyword_by_age)
+### DataLab Tools
 
-## 설치 및 실행
+- Search Trend Analysis (datalab_search)
+- Shopping Category Trend Analysis (datalab_shopping_category)
+- Shopping Device Usage Analysis (datalab_shopping_by_device)
+- Shopping Gender Analysis (datalab_shopping_by_gender)
+- Shopping Age Group Analysis (datalab_shopping_by_age)
+- Shopping Keyword Trend Analysis (datalab_shopping_keywords)
+- Shopping Keyword Device Analysis (datalab_shopping_keyword_by_device)
+- Shopping Keyword Gender Analysis (datalab_shopping_keyword_by_gender)
+- Shopping Keyword Age Analysis (datalab_shopping_keyword_by_age)
 
-### 환경 변수 설정
+## Installation & Usage
+
+### Environment Variables
 
 ```bash
 # Windows
@@ -59,13 +63,13 @@ export NAVER_CLIENT_ID=your_client_id
 export NAVER_CLIENT_SECRET=your_client_secret
 ```
 
-### NPX로 실행
+### Run with NPX
 
 ```bash
 npx @modelcontextprotocol/server-naver-search
 ```
 
-### Docker로 실행
+### Run with Docker
 
 ```bash
 docker run -i --rm \
@@ -74,9 +78,9 @@ docker run -i --rm \
   mcp/naver-search
 ```
 
-## Cursor Desktop 설정
+## Cursor Desktop Configuration
 
-`claude_desktop_config.json`에 다음 내용을 추가하세요:
+Add to `claude_desktop_config.json`:
 
 ```json
 {
@@ -93,7 +97,7 @@ docker run -i --rm \
 }
 ```
 
-Docker를 사용하는 경우:
+For Docker:
 
 ```json
 {
@@ -115,41 +119,42 @@ Docker를 사용하는 경우:
 }
 ```
 
-## 도구 설명
+## Tool Details
 
-### 검색 도구
+### Search Tools
 
-각 검색 도구는 다음 매개변수를 사용합니다:
+Each search tool accepts these parameters:
 
-- `query`: 검색어 (필수)
-- `display`: 표시할 결과 수 (기본값: 10)
-- `start`: 검색 결과 시작 위치 (기본값: 1)
-- `sort`: 정렬 방법 (sim: 유사도순, date: 날짜순)
+- `query`: Search term (required)
+- `display`: Number of results to show (default: 10)
+- `start`: Start position (default: 1)
+- `sort`: Sort method (sim: similarity, date: date)
 
-사용 가능한 검색 도구:
+Available search tools:
 
-- **search_news**: 네이버 뉴스 검색
-- **search_blog**: 네이버 블로그 검색
-- **search_shop**: 네이버 쇼핑 검색
-- **search_image**: 네이버 이미지 검색
-- **search_kin**: 네이버 지식iN 검색
-- **search_book**: 네이버 책 검색
-- **search_encyc**: 네이버 백과사전 검색
-- **search_academic**: 네이버 학술자료 검색
-- **search_local**: 네이버 지역 검색
+- **search_webkr**: Search Naver web documents
+- **search_news**: Search Naver news
+- **search_blog**: Search Naver blogs
+- **search_shop**: Search Naver shopping
+- **search_image**: Search Naver images
+- **search_kin**: Search Naver KnowledgeiN
+- **search_book**: Search Naver books
+- **search_encyc**: Search Naver encyclopedia
+- **search_academic**: Search Naver academic papers
+- **search_local**: Search Naver local places
 
-### 데이터랩 도구
+### DataLab Tools
 
 - **datalab_search**
 
-  - 검색어 트렌드 분석
-  - 매개변수:
-    - `startDate`: 분석 시작일 (YYYY-MM-DD)
-    - `endDate`: 분석 종료일 (YYYY-MM-DD)
-    - `timeUnit`: 분석 시간 단위 (date: 일간, week: 주간, month: 월간)
-    - `keywordGroups`: 분석할 키워드 그룹 배열
-      - `groupName`: 키워드 그룹 이름
-      - `keywords`: 그룹 내 키워드 배열
+  - Analyze search term trends
+  - Parameters:
+    - `startDate`: Analysis start date (YYYY-MM-DD)
+    - `endDate`: Analysis end date (YYYY-MM-DD)
+    - `timeUnit`: Analysis time unit (date/week/month)
+    - `keywordGroups`: Array of keyword groups
+      - `groupName`: Group name
+      - `keywords`: Array of keywords
 
 - **datalab_shopping_category**
 
@@ -232,14 +237,16 @@ Docker를 사용하는 경우:
     - `keyword`: 검색 키워드
     - `ages`: 연령대 배열 (예: ["10", "20", "30"])
 
-## 빌드
+## Build
 
-Docker 빌드:
+Docker build:
 
 ```bash
 docker build -t mcp/naver-search .
 ```
 
-## 라이선스
+## License
 
-MIT 라이선스
+MIT License
+
+For Korean documentation, please see [README-ko.md](README-ko.md)
