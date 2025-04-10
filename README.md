@@ -25,16 +25,7 @@ MCP server for Naver Search API and DataLab API integration, enabling comprehens
 
 ## Tool Details
 
-### Search Tools
-
-Each search tool accepts these parameters:
-
-- `query`: Search term (required)
-- `display`: Number of results to show (default: 10)
-- `start`: Start position (default: 1)
-- `sort`: Sort method (sim: similarity, date: date)
-
-### Available search tools:
+### Available tools:
 
 - **search_webkr**: Search Naver web documents
 - **search_news**: Search Naver news
