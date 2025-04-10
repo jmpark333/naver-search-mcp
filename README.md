@@ -6,14 +6,14 @@
 
 MCP server for Naver Search API and DataLab API integration, enabling comprehensive search across various Naver services and data trend analysis.
 
-## Prerequisites
+#### Prerequisites
 
 - Naver Developers API Key (Client ID and Secret)
 - Node.js 18 or higher
 - NPM 8 or higher
 - Docker (optional, for container deployment)
 
-## Getting API Keys
+#### Getting API Keys
 
 1. Visit [Naver Developers](https://developers.naver.com/apps/#/register)
 2. Click "Register Application"
@@ -23,36 +23,44 @@ MCP server for Naver Search API and DataLab API integration, enabling comprehens
    - DataLab (Shopping Insight)
 4. Set the obtained Client ID and Client Secret as environment variables
 
-## Features
+## Installation
 
-### Search Tools
+### Option 1: Quick Install via Smithery (Recommended)
 
-- Naver Web Documents Search (search_webkr)
-- Naver News Search (search_news)
-- Naver Blog Search (search_blog)
-- Naver Shopping Search (search_shop)
-- Naver Image Search (search_image)
-- Naver KnowledgeiN Search (search_kin)
-- Naver Book Search (search_book)
-- Naver Encyclopedia Search (search_encyc)
-- Naver Academic Search (search_academic)
-- Naver Local Search (search_local)
+To install Naver Search MCP Server automatically via Smithery, use one of these commands based on your AI client:
 
-### DataLab Tools
+For Claude Desktop:
 
-- Search Trend Analysis (datalab_search)
-- Shopping Category Trend Analysis (datalab_shopping_category)
-- Shopping Device Usage Analysis (datalab_shopping_by_device)
-- Shopping Gender Analysis (datalab_shopping_by_gender)
-- Shopping Age Group Analysis (datalab_shopping_by_age)
-- Shopping Keyword Trend Analysis (datalab_shopping_keywords)
-- Shopping Keyword Device Analysis (datalab_shopping_keyword_by_device)
-- Shopping Keyword Gender Analysis (datalab_shopping_keyword_by_gender)
-- Shopping Keyword Age Analysis (datalab_shopping_keyword_by_age)
+```bash
+npx -y @smithery/cli@latest install @isnow890/naver-search-mcp --client claude
+```
 
-## Installation & Usage
+For Cursor:
 
-### Environment Variables
+```bash
+npx -y @smithery/cli@latest install @isnow890/naver-search-mcp --client cursor
+```
+
+For Windsurf:
+
+```bash
+npx -y @smithery/cli@latest install @isnow890/naver-search-mcp --client windsurf
+```
+
+For Cline:
+
+```bash
+npx -y @smithery/cli@latest install @isnow890/naver-search-mcp --client cline
+```
+
+The installer will prompt you for:
+
+- NAVER_CLIENT_ID
+- NAVER_CLIENT_SECRET
+
+### Option 2: Manual Installation
+
+#### Environment Variables
 
 ```bash
 # Windows
@@ -64,13 +72,13 @@ export NAVER_CLIENT_ID=your_client_id
 export NAVER_CLIENT_SECRET=your_client_secret
 ```
 
-### Run with NPX
+#### Run with NPX
 
 ```bash
 npx @modelcontextprotocol/server-naver-search
 ```
 
-### Run with Docker
+#### Run with Docker
 
 ```bash
 docker run -i --rm \
@@ -249,5 +257,3 @@ docker build -t mcp/naver-search .
 ## License
 
 MIT License
-
-For Korean documentation, please see [README-ko.md](README-ko.md)
