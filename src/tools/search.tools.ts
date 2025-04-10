@@ -1,13 +1,17 @@
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { SearchArgsSchema } from "../schemas/search.schemas.js";
-import { 
-  NaverLocalSearchParamsSchema 
-} from "../types/naver-search.types.js";
+import { NaverLocalSearchParamsSchema } from "../types/naver-search.types.js";
 
 /**
  * 검색 관련 도구 정의
  */
 export const searchTools = [
+  {
+    name: "search_webkr",
+    description:
+      "Perform a search on Naver Web Documents. (네이버 웹문서 검색)",
+    inputSchema: zodToJsonSchema(SearchArgsSchema),
+  },
   {
     name: "search_news",
     description: "Perform a search on Naver News. (네이버 뉴스 검색)",
@@ -40,7 +44,8 @@ export const searchTools = [
   },
   {
     name: "search_encyc",
-    description: "Perform a search on Naver Encyclopedia. (네이버 지식백과 검색)",
+    description:
+      "Perform a search on Naver Encyclopedia. (네이버 지식백과 검색)",
     inputSchema: zodToJsonSchema(SearchArgsSchema),
   },
   {
@@ -53,4 +58,4 @@ export const searchTools = [
     description: "Perform a search on Naver Local. (네이버 지역 검색)",
     inputSchema: zodToJsonSchema(NaverLocalSearchParamsSchema),
   },
-]; 
+];
