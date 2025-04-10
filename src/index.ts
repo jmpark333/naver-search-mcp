@@ -10,30 +10,31 @@ import { NaverSearchClient } from "./naver-search.client.js";
 import { SearchArgsSchema } from "./schemas/search.schemas.js";
 import { searchTools } from "./tools/search.tools.js";
 import { datalabTools } from "./tools/datalab.tools.js";
-import { 
+import {
   handleAcademicSearch,
   handleBlogSearch,
-  handleBookSearch, 
-  handleCafeArticleSearch, 
-  handleEncycSearch, 
-  handleImageSearch, 
-  handleKinSearch, 
-  handleLocalSearch, 
-  handleNewsSearch, 
-  handleSearch, 
-  handleShopSearch, 
-  handleWebSearch 
+  handleBookSearch,
+  handleCafeArticleSearch,
+  handleEncycSearch,
+  handleImageSearch,
+  handleKinSearch,
+  handleLocalSearch,
+  handleNewsSearch,
+  handleSearch,
+  handleShopSearch,
+  handleWebSearch,
+  handleWebKrSearch,
 } from "./handlers/search.handlers.js";
-import { 
-  handleSearchTrend, 
-  handleShoppingByAgeTrend, 
-  handleShoppingByDeviceTrend, 
-  handleShoppingByGenderTrend, 
-  handleShoppingCategoryTrend, 
-  handleShoppingKeywordByAgeTrend, 
-  handleShoppingKeywordByDeviceTrend, 
-  handleShoppingKeywordByGenderTrend, 
-  handleShoppingKeywordsTrend 
+import {
+  handleSearchTrend,
+  handleShoppingByAgeTrend,
+  handleShoppingByDeviceTrend,
+  handleShoppingByGenderTrend,
+  handleShoppingCategoryTrend,
+  handleShoppingKeywordByAgeTrend,
+  handleShoppingKeywordByDeviceTrend,
+  handleShoppingKeywordByGenderTrend,
+  handleShoppingKeywordsTrend,
 } from "./handlers/datalab.handlers.js";
 
 // 환경 변수 유효성 검사
@@ -101,6 +102,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
     switch (name) {
       // 검색 API
+      case "search_webkr":
+        result = await handleWebKrSearch(SearchArgsSchema.parse(args));
+        break;
       case "search_news":
         result = await handleNewsSearch(SearchArgsSchema.parse(args));
         break;

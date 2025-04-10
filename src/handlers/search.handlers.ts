@@ -1,7 +1,8 @@
 import { NaverSearchClient } from "../naver-search.client.js";
-import { 
-  NaverSearchType, NaverDocumentSearchParams, 
-  NaverLocalSearchParams
+import {
+  NaverSearchType,
+  NaverDocumentSearchParams,
+  NaverLocalSearchParams,
 } from "../types/naver-search.types.js";
 import { SearchArgs } from "../schemas/search.schemas.js";
 
@@ -11,7 +12,9 @@ const client = NaverSearchClient.getInstance();
 /**
  * 기본 검색 핸들러
  */
-export async function handleSearch(params: SearchArgs & { type: NaverSearchType }) {
+export async function handleSearch(
+  params: SearchArgs & { type: NaverSearchType }
+) {
   return client.search({ ...params });
 }
 
@@ -90,4 +93,9 @@ export async function handleWebSearch(params: SearchArgs) {
  */
 export async function handleCafeArticleSearch(params: SearchArgs) {
   return client.search<any>({ type: "cafearticle", ...params });
-} 
+}
+
+export async function handleWebKrSearch(args: SearchArgs) {
+  const client = NaverSearchClient.getInstance();
+  return await client.search({ type: "webkr", ...args });
+}
