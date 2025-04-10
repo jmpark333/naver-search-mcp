@@ -1,5 +1,6 @@
 # 네이버 검색 MCP 서버
 
+[![English](https://img.shields.io/badge/English-README-blue)](README.md)
 [![smithery badge](https://smithery.ai/badge/@isnow890/naver-search-mcp)](https://smithery.ai/server/@isnow890/naver-search-mcp)
 [![MCP.so](https://img.shields.io/badge/MCP.so-Naver%20Search%20MCP-blue)](https://mcp.so/server/naver-search-mcp/isnow890)
 
