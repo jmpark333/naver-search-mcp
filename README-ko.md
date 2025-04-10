@@ -1,33 +1,57 @@
-# 네이버 검색 MCP 서버
+# Naver Search MCP Server
 
-[![English](https://img.shields.io/badge/English-README-blue)](README.md)
+[![English](https://img.shields.io/badge/English-README-yellow)](README.md)
 [![smithery badge](https://smithery.ai/badge/@isnow890/naver-search-mcp)](https://smithery.ai/server/@isnow890/naver-search-mcp)
 [![MCP.so](https://img.shields.io/badge/MCP.so-Naver%20Search%20MCP-blue)](https://mcp.so/server/naver-search-mcp/isnow890)
 
-네이버 검색 API를 사용하여 다양한 콘텐츠를 검색하고 데이터랩으로 데이터를 분석할 수 있는 MCP 서버입니다.
+Naver 검색 API와 DataLab API 통합을 위한 MCP 서버로, 다양한 Naver 서비스에서의 종합적인 검색과 데이터 트렌드 분석을 가능하게 합니다.
 
-#### 필수 요구사항
+#### 필수 요구 사항
 
-- 네이버 개발자 API 키 (Client ID와 Secret)
+- Naver Developers API 키(클라이언트 ID 및 시크릿)
 - Node.js 18 이상
 - NPM 8 이상
-- Docker (선택사항, 컨테이너 배포용)
+- Docker (선택 사항, 컨테이너 배포용)
 
-#### API 키 발급 방법
+#### API 키 얻기
 
-1. [네이버 개발자 센터](https://developers.naver.com/apps/#/register)에 접속합니다.
-2. 애플리케이션 등록을 클릭합니다.
-3. 애플리케이션 이름을 입력하고, 사용 API에서 다음 항목들을 반드시 모두 선택합니다:
-   - 검색 (검색 API - 블로그, 뉴스, 책 등 검색 기능 사용)
-   - 데이터랩(검색어 트렌드) (검색어 트렌드 분석 기능 사용)
-   - 데이터랩(쇼핑인사이트) (쇼핑 분야 트렌드 분석 기능 사용)
-4. 발급받은 Client ID와 Client Secret을 환경 변수로 설정합니다.
+1. [Naver Developers](https://developers.naver.com/apps/#/register)에 방문
+2. "애플리케이션 등록"을 클릭
+3. 애플리케이션 이름을 입력하고 다음 API를 모두 선택:
+   - 검색 (블로그, 뉴스, 책 검색 등을 위한)
+   - DataLab (검색 트렌드)
+   - DataLab (쇼핑 인사이트)
+4. 얻은 클라이언트 ID와 클라이언트 시크릿을 환경 변수로 설정
 
-## 설치 방법
+## 도구 세부 정보
 
-### 방법 1: Smithery를 통한 빠른 설치 (권장)
+### 사용 가능한 도구:
 
-Smithery를 통해 네이버 검색 MCP 서버를 자동으로 설치하려면 사용 중인 AI 클라이언트에 맞는 명령어를 실행하세요:
+- **search_webkr**: Naver 웹 문서 검색
+- **search_news**: Naver 뉴스 검색
+- **search_blog**: Naver 블로그 검색
+- **search_shop**: Naver 쇼핑 검색
+- **search_image**: Naver 이미지 검색
+- **search_kin**: Naver 지식iN 검색
+- **search_book**: Naver 책 검색
+- **search_encyc**: Naver 백과사전 검색
+- **search_academic**: Naver 학술 논문 검색
+- **search_local**: Naver 지역 장소 검색
+- **datalab_search**: 검색어 트렌드 분석
+- **datalab_shopping_category**: 쇼핑 카테고리 트렌드 분석
+- **datalab_shopping_by_device**: 기기별 쇼핑 트렌드 분석
+- **datalab_shopping_by_gender**: 성별 쇼핑 트렌드 분석
+- **datalab_shopping_by_age**: 연령대별 쇼핑 트렌드 분석
+- **datalab_shopping_keywords**: 쇼핑 키워드 트렌드 분석
+- **datalab_shopping_keyword_by_device**: 쇼핑 키워드 기기별 트렌드 분석
+- **datalab_shopping_keyword_by_gender**: 쇼핑 키워드 성별 트렌드 분석
+- **datalab_shopping_keyword_by_age**: 쇼핑 키워드 연령별 트렌드 분석
+
+## 설치
+
+### 옵션 1: Smithery를 통한 빠른 설치 (권장)
+
+Smithery를 통해 Naver Search MCP 서버를 자동으로 설치하려면 AI 클라이언트에 따라 다음 명령 중 하나를 사용하세요:
 
 Claude Desktop용:
 
@@ -53,16 +77,14 @@ Cline용:
 npx -y @smithery/cli@latest install @isnow890/naver-search-mcp --client cline
 ```
 
-설치 과정에서 다음 정보를 입력하라는 메시지가 표시됩니다:
+설치 프로그램은 다음 정보를 요청할 것입니다:
 
 - NAVER_CLIENT_ID
 - NAVER_CLIENT_SECRET
 
-### 방법 2: 수동 설치
+### 옵션 2: 수동 설치
 
-
-
-#### 환경 변수 설정
+#### 환경 변수
 
 ```bash
 # Windows
@@ -89,33 +111,46 @@ docker run -i --rm \
   mcp/naver-search
 ```
 
-## 주요 기능
+## Cursor Desktop 구성
 
-### 검색 기능
+`claude_desktop_config.json`에 추가:
 
-- 네이버 웹문서 검색 (search_webkr)
-- 네이버 뉴스 검색 (search_news)
-- 네이버 블로그 검색 (search_blog)
-- 네이버 쇼핑 검색 (search_shop)
-- 네이버 이미지 검색 (search_image)
-- 네이버 지식iN 검색 (search_kin)
-- 네이버 책 검색 (search_book)
-- 네이버 백과사전 검색 (search_encyc)
-- 네이버 학술자료 검색 (search_academic)
-- 네이버 지역 검색 (search_local)
+```json
+{
+  "mcpServers": {
+    "naver-search": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-naver-search"],
+      "env": {
+        "NAVER_CLIENT_ID": "your_client_id",
+        "NAVER_CLIENT_SECRET": "your_client_secret"
+      }
+    }
+  }
+}
+```
 
-### 데이터랩 기능
+Docker의 경우:
 
-- 네이버 검색어 트렌드 분석 (datalab_search)
-- 네이버 쇼핑 카테고리별 트렌드 분석 (datalab_shopping_category)
-- 네이버 쇼핑 기기별 트렌드 분석 (datalab_shopping_by_device)
-- 네이버 쇼핑 성별 트렌드 분석 (datalab_shopping_by_gender)
-- 네이버 쇼핑 연령별 트렌드 분석 (datalab_shopping_by_age)
-- 네이버 쇼핑 키워드별 트렌드 분석 (datalab_shopping_keywords)
-- 네이버 쇼핑 키워드 기기별 트렌드 분석 (datalab_shopping_keyword_by_device)
-- 네이버 쇼핑 키워드 성별 트렌드 분석 (datalab_shopping_keyword_by_gender)
-- 네이버 쇼핑 키워드 연령별 트렌드 분석 (datalab_shopping_keyword_by_age)
-
+```json
+{
+  "mcpServers": {
+    "naver-search": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "NAVER_CLIENT_ID=your_client_id",
+        "-e",
+        "NAVER_CLIENT_SECRET=your_client_secret",
+        "mcp/naver-search"
+      ]
+    }
+  }
+}
+```
 ## 빌드
 
 Docker 빌드:
