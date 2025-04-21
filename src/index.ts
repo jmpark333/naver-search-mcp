@@ -24,17 +24,6 @@ import {
   handleWebSearch,
   handleWebKrSearch,
 } from "./handlers/search.handlers.js";
-import {
-  handleSearchTrend,
-  handleShoppingByAgeTrend,
-  handleShoppingByDeviceTrend,
-  handleShoppingByGenderTrend,
-  handleShoppingCategoryTrend,
-  handleShoppingKeywordByAgeTrend,
-  handleShoppingKeywordByDeviceTrend,
-  handleShoppingKeywordByGenderTrend,
-  handleShoppingKeywordsTrend,
-} from "./handlers/datalab.handlers.js";
 
 // 환경 변수 유효성 검사
 const NAVER_CLIENT_ID = process.env.NAVER_CLIENT_ID!;
@@ -67,10 +56,25 @@ const server = new Server(
   }
 );
 
+// 트렌드 분석 도구 제거 (2025-04-21 20:24:46)
+// import { datalabTools } from "./tools/datalab.tools.js";
+// 트렌드 분석 핸들러 import 제거 (2025-04-21 20:24:46)
+// import {
+//   handleSearchTrend,
+//   handleShoppingByAgeTrend,
+//   handleShoppingByDeviceTrend,
+//   handleShoppingByGenderTrend,
+//   handleShoppingCategoryTrend,
+//   handleShoppingKeywordByAgeTrend,
+//   handleShoppingKeywordByDeviceTrend,
+//   handleShoppingKeywordByGenderTrend,
+//   handleShoppingKeywordsTrend,
+// } from "./handlers/datalab.handlers.js";
+
 // 도구 목록을 반환하는 핸들러 등록
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
-    tools: [...searchTools, ...datalabTools],
+    tools: [...searchTools], // datalabTools 제거 (2025-04-21 20:24:46)
   };
 });
 
@@ -131,36 +135,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       case "search_local":
         result = await handleLocalSearch(args as any);
         break;
-
-      // 데이터랩 API
-      case "datalab_search":
-        result = await handleSearchTrend(args as any);
-        break;
-      case "datalab_shopping_category":
-        result = await handleShoppingCategoryTrend(args as any);
-        break;
-      case "datalab_shopping_by_device":
-        result = await handleShoppingByDeviceTrend(args as any);
-        break;
-      case "datalab_shopping_by_gender":
-        result = await handleShoppingByGenderTrend(args as any);
-        break;
-      case "datalab_shopping_by_age":
-        result = await handleShoppingByAgeTrend(args as any);
-        break;
-      case "datalab_shopping_keywords":
-        result = await handleShoppingKeywordsTrend(args as any);
-        break;
-      case "datalab_shopping_keyword_by_device":
-        result = await handleShoppingKeywordByDeviceTrend(args as any);
-        break;
-      case "datalab_shopping_keyword_by_gender":
-        result = await handleShoppingKeywordByGenderTrend(args as any);
-        break;
-      case "datalab_shopping_keyword_by_age":
-        result = await handleShoppingKeywordByAgeTrend(args as any);
-        break;
-
+      // datalab_* 트렌드 분석 관련 case 전체 제거 (2025-04-21 20:24:46)
       default:
         throw new Error(`Unknown tool: ${name}`);
     }
