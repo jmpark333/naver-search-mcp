@@ -6,7 +6,7 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "mcp-server-naver-search": "dist/index.js"
+    "mcp-server-naver-search": "dist/src/index.js"
   },
   "files": [
     "dist"
