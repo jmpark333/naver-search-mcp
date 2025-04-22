@@ -19,8 +19,6 @@ MCP server for Naver Search API and DataLab API integration, enabling comprehens
 2. Click "Register Application"
 3. Enter application name and select ALL of the following APIs:
    - Search (for blog, news, book search, etc.)
-   - DataLab (Search Trends)
-   - DataLab (Shopping Insight)
 4. Set the obtained Client ID and Client Secret as environment variables
 
 ## Tool Details
