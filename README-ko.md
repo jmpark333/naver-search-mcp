@@ -11,7 +11,6 @@ Naver 검색 API와 DataLab API 통합을 위한 MCP 서버로, 다양한 Naver 
 - Naver Developers API 키(클라이언트 ID 및 시크릿)
 - Node.js 18 이상
 - NPM 8 이상
-- Docker (선택 사항, 컨테이너 배포용)
 
 #### API 키 얻기
 
@@ -37,90 +36,53 @@ Naver 검색 API와 DataLab API 통합을 위한 MCP 서버로, 다양한 Naver 
 - **search_encyc**: Naver 백과사전 검색
 - **search_academic**: Naver 학술 논문 검색
 - **search_local**: Naver 지역 장소 검색
-- **datalab_search**: 검색어 트렌드 분석
-- **datalab_shopping_category**: 쇼핑 카테고리 트렌드 분석
-- **datalab_shopping_by_device**: 기기별 쇼핑 트렌드 분석
-- **datalab_shopping_by_gender**: 성별 쇼핑 트렌드 분석
-- **datalab_shopping_by_age**: 연령대별 쇼핑 트렌드 분석
-- **datalab_shopping_keywords**: 쇼핑 키워드 트렌드 분석
-- **datalab_shopping_keyword_by_device**: 쇼핑 키워드 기기별 트렌드 분석
-- **datalab_shopping_keyword_by_gender**: 쇼핑 키워드 성별 트렌드 분석
-- **datalab_shopping_keyword_by_age**: 쇼핑 키워드 연령별 트렌드 분석
+
+<!-- 트렌드 분석 도구 제거 (2025-04-22 09:55:00) -->
+<!-- 아래 도구들은 더 이상 제공되지 않습니다. -->
+<!-- - **datalab_search**: 검색어 트렌드 분석 -->
+<!-- - **datalab_shopping_category**: 쇼핑 카테고리 트렌드 분석 -->
+<!-- - **datalab_shopping_by_device**: 기기별 쇼핑 트렌드 분석 -->
+<!-- - **datalab_shopping_by_gender**: 성별 쇼핑 트렌드 분석 -->
+<!-- - **datalab_shopping_by_age**: 연령대별 쇼핑 트렌드 분석 -->
+<!-- - **datalab_shopping_keywords**: 쇼핑 키워드 트렌드 분석 -->
+<!-- - **datalab_shopping_keyword_by_device**: 쇼핑 키워드 기기별 트렌드 분석 -->
+<!-- - **datalab_shopping_keyword_by_gender**: 쇼핑 키워드 성별 트렌드 분석 -->
+<!-- - **datalab_shopping_keyword_by_age**: 쇼핑 키워드 연령별 트렌드 분석 -->
 
 ## 설치
 
-### 옵션 1: Smithery를 통한 빠른 설치 (권장)
+### GitHub 저장소를 통한 설치 (2025-04-22 09:57:00)
 
-Smithery를 통해 Naver Search MCP 서버를 자동으로 설치하려면 AI 클라이언트에 따라 다음 명령 중 하나를 사용하세요:
-
-Claude Desktop용:
+아래 명령어로 저장소를 직접 클론하여 설치합니다:
 
 ```bash
-npx -y @smithery/cli@latest install @isnow890/naver-search-mcp --client claude
+# 저장소 클론
+ git clone https://github.com/jmpark333/naver-search-mcp.git
+ cd naver-search-mcp
+
+# 환경 변수 설정 (네이버 API 키 필요)
+ export NAVER_CLIENT_ID=여기에_클라이언트_ID_입력
+ export NAVER_CLIENT_SECRET=여기에_클라이언트_SECRET_입력
+
+# MCP 서버 실행
+ npx -y github:jmpark333/naver-search-mcp
 ```
 
-Cursor용:
+- Node.js 18 이상, npm 8 이상 필요
+- 네이버 API 키는 [Naver Developers](https://developers.naver.com/apps/#/register)에서 직접 발급받아야 합니다.
 
-```bash
-npx -y @smithery/cli@latest install @isnow890/naver-search-mcp --client cursor
-```
-
-Windsurf용:
-
-```bash
-npx -y @smithery/cli@latest install @isnow890/naver-search-mcp --client windsurf
-```
-
-Cline용:
-
-```bash
-npx -y @smithery/cli@latest install @isnow890/naver-search-mcp --client cline
-```
-
-설치 프로그램은 다음 정보를 요청할 것입니다:
-
-- NAVER_CLIENT_ID
-- NAVER_CLIENT_SECRET
-
-### 옵션 2: 수동 설치
-
-#### 환경 변수
-
-```bash
-# Windows
-set NAVER_CLIENT_ID=your_client_id
-set NAVER_CLIENT_SECRET=your_client_secret
-
-# Linux/Mac
-export NAVER_CLIENT_ID=your_client_id
-export NAVER_CLIENT_SECRET=your_client_secret
-```
-
-#### NPX로 실행
-
-```bash
-npx @modelcontextprotocol/server-naver-search
-```
-
-#### Docker로 실행
-
-```bash
-docker run -i --rm \
-  -e NAVER_CLIENT_ID=your_client_id \
-  -e NAVER_CLIENT_SECRET=your_client_secret \
-  mcp/naver-search
-```
+<!-- Docker 설치 방법 제거 (2025-04-22 09:57:00) -->
 
 ## Cursor Desktop 구성
 
-`claude_desktop_config.json`에 추가:
+`claude_desktop_config.json`에 아래와 같이 추가하세요:
 
 ```json
 {
   "mcpServers": {
     "naver-search": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-naver-search"],
+      "args": ["-y", "github:jmpark333/naver-search-mcp"],
       "env": {
         "NAVER_CLIENT_ID": "your_client_id",
         "NAVER_CLIENT_SECRET": "your_client_secret"
@@ -130,35 +92,12 @@ docker run -i --rm \
 }
 ```
 
-Docker의 경우:
-
-```json
-{
-  "mcpServers": {
-    "naver-search": {
-      "command": "docker",
-      "args": [
-        "run",
-        "-i",
-        "--rm",
-        "-e",
-        "NAVER_CLIENT_ID=your_client_id",
-        "-e",
-        "NAVER_CLIENT_SECRET=your_client_secret",
-        "mcp/naver-search"
-      ]
-    }
-  }
-}
-```
 ## 빌드
 
-Docker 빌드:
-
 ```bash
-docker build -t mcp/naver-search .
+npm install
 ```
 
 ## 라이선스
 
-MIT 라이선스
+MIT License
