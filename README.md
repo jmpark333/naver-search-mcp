@@ -11,7 +11,6 @@ MCP server for Naver Search API and DataLab API integration, enabling comprehens
 - Naver Developers API Key (Client ID and Secret)
 - Node.js 18 or higher
 - NPM 8 or higher
-- Docker (optional, for container deployment)
 
 #### Getting API Keys
 
@@ -19,6 +18,8 @@ MCP server for Naver Search API and DataLab API integration, enabling comprehens
 2. Click "Register Application"
 3. Enter application name and select ALL of the following APIs:
    - Search (for blog, news, book search, etc.)
+   - DataLab (Search Trends)
+   - DataLab (Shopping Insight)
 4. Set the obtained Client ID and Client Secret as environment variables
 
 ## Tool Details
@@ -36,69 +37,41 @@ MCP server for Naver Search API and DataLab API integration, enabling comprehens
 - **search_academic**: Search Naver academic papers
 - **search_local**: Search Naver local places
 
+<!-- Removed DataLab trend analysis tools (2025-04-22 09:55:00) -->
+<!-- The following tools are no longer provided. -->
+<!-- - **datalab_search**: Analyze search term trends -->
+<!-- - **datalab_shopping_category**: Analyze shopping category trends -->
+<!-- - **datalab_shopping_by_device**: Analyze shopping trends by device -->
+<!-- - **datalab_shopping_by_gender**: Analyze shopping trends by gender -->
+<!-- - **datalab_shopping_by_age**: Analyze shopping trends by age group -->
+<!-- - **datalab_shopping_keywords**: Analyze shopping keyword trends -->
+<!-- - **datalab_shopping_keyword_by_device**: Analyze shopping keyword trends by device -->
+<!-- - **datalab_shopping_keyword_by_gender**: Analyze shopping keyword trends by gender -->
+<!-- - **datalab_shopping_keyword_by_age**: Analyze shopping keyword trends by age group -->
+
 ## Installation
 
-### Option 1: Quick Install via Smithery (Recommended)
+### Install via GitHub repository (2025-04-22 09:57:00)
 
-To install Naver Search MCP Server automatically via Smithery, use one of these commands based on your AI client:
-
-For Claude Desktop:
+Clone the repository and run directly:
 
 ```bash
-npx -y @smithery/cli@latest install @isnow890/naver-search-mcp --client claude
-```
+# Clone repository
+git clone https://github.com/jmpark333/naver-search-mcp.git
+cd naver-search-mcp
 
-For Cursor:
-
-```bash
-npx -y @smithery/cli@latest install @isnow890/naver-search-mcp --client cursor
-```
-
-For Windsurf:
-
-```bash
-npx -y @smithery/cli@latest install @isnow890/naver-search-mcp --client windsurf
-```
-
-For Cline:
-
-```bash
-npx -y @smithery/cli@latest install @isnow890/naver-search-mcp --client cline
-```
-
-The installer will prompt you for:
-
-- NAVER_CLIENT_ID
-- NAVER_CLIENT_SECRET
-
-### Option 2: Manual Installation
-
-#### Environment Variables
-
-```bash
-# Windows
-set NAVER_CLIENT_ID=your_client_id
-set NAVER_CLIENT_SECRET=your_client_secret
-
-# Linux/Mac
+# Set environment variables (Naver API keys required)
 export NAVER_CLIENT_ID=your_client_id
 export NAVER_CLIENT_SECRET=your_client_secret
+
+# Run MCP server
+npx -y github:jmpark333/naver-search-mcp
 ```
 
-#### Run with NPX
+- Requires Node.js 18+ and npm 8+
+- You must issue your own Naver API keys from [Naver Developers](https://developers.naver.com/apps/#/register)
 
-```bash
-npx @modelcontextprotocol/server-naver-search
-```
-
-#### Run with Docker
-
-```bash
-docker run -i --rm \
-  -e NAVER_CLIENT_ID=your_client_id \
-  -e NAVER_CLIENT_SECRET=your_client_secret \
-  mcp/naver-search
-```
+<!-- Docker installation method removed (2025-04-22 09:57:00) -->
 
 ## Cursor Desktop Configuration
 
@@ -109,7 +82,7 @@ Add to `claude_desktop_config.json`:
   "mcpServers": {
     "naver-search": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-naver-search"],
+      "args": ["-y", "github:jmpark333/naver-search-mcp"],
       "env": {
         "NAVER_CLIENT_ID": "your_client_id",
         "NAVER_CLIENT_SECRET": "your_client_secret"
@@ -119,36 +92,11 @@ Add to `claude_desktop_config.json`:
 }
 ```
 
-For Docker:
-
-```json
-{
-  "mcpServers": {
-    "naver-search": {
-      "command": "docker",
-      "args": [
-        "run",
-        "-i",
-        "--rm",
-        "-e",
-        "NAVER_CLIENT_ID=your_client_id",
-        "-e",
-        "NAVER_CLIENT_SECRET=your_client_secret",
-        "mcp/naver-search"
-      ]
-    }
-  }
-}
-```
 ## Build
 
-Docker build:
-
 ```bash
-docker build -t mcp/naver-search .
+npm install
 ```
-
-
 
 ## License
 
