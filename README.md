@@ -37,15 +37,6 @@ MCP server for Naver Search API and DataLab API integration, enabling comprehens
 - **search_encyc**: Search Naver encyclopedia
 - **search_academic**: Search Naver academic papers
 - **search_local**: Search Naver local places
-- **datalab_search**: Analyze search term trends
-- **datalab_shopping_category**: Analyze shopping category trends
-- **datalab_shopping_by_device**: Analyze shopping trends by device
-- **datalab_shopping_by_gender**: Analyze shopping trends by gender
-- **datalab_shopping_by_age**: Analyze shopping trends by age group
-- **datalab_shopping_keywords**: Analyze shopping keyword trends
-- **datalab_shopping_keyword_by_device**: Analyze shopping keyword trends by device
-- **datalab_shopping_keyword_by_gender**: Analyze shopping keyword trends by gender
-- **datalab_shopping_keyword_by_age**: Analyze shopping keyword trends by age group
 
 ## Installation
 
